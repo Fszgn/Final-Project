@@ -6,7 +6,10 @@ const App = () => {
   useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
+        .then((data) => {
+            console.log(data)
+            setData(data.message)
+        });
   }, []);
 
   return (
