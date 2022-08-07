@@ -5,8 +5,10 @@ import GlobalStyles from "./GlobalStyles/GlobalStyles";
 import Header from "./Header/Header";
 
 import { useEffect, useState } from "react";
-import Login from "./Components/Login";
+import LoginStudent from "./Components/LoginContainer/LoginStudent";
 import HomeFeed from "./Components/HomeFeed";
+import LoginContainer from "./Components/LoginContainer/LoginContainer";
+import LoginMentor from "./Components/LoginContainer/loginMentor";
 
 const App = () => {
   const [data, setData] = useState(null);
@@ -27,7 +29,9 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/Home" element={<HomeFeed />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/LoginStudent" element={<LoginStudent />} />
+          <Route path="/LoginMentor" element={<LoginMentor />} />
+          <Route path="/LoginPage" element={<LoginContainer />} />
         </Routes>
       </Wrapper>
     </Router>

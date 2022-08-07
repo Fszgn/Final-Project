@@ -1,17 +1,16 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-const Header = () => {
+const LoginContainer = () => {
   return (
     <Container>
-      <LoginButton to="/LoginPage">Login</LoginButton>
-      <HomeButton to="/Home">Home</HomeButton>
+      <StudentButton to="/LoginStudent">Student</StudentButton>
+      <MentorButton to="/LoginMentor">Mentor</MentorButton>
     </Container>
   );
 };
 
-
-const LoginButton = styled(NavLink)`
+const StudentButton = styled(NavLink)`
   margin-left: 40px;
   text-decoration: none;
   color: black;
@@ -21,7 +20,7 @@ const LoginButton = styled(NavLink)`
     color: var(--color-navbar-beige);
   }
 `;
-const HomeButton = styled(NavLink)`
+const MentorButton = styled(NavLink)`
   margin-left: 40px;
   text-decoration: none;
   color: black;
@@ -32,10 +31,9 @@ const HomeButton = styled(NavLink)`
   }
 `;
 const Container = styled.div`
-    width: 100vw;
-    height: 200px;
+  width: 100vw;
+  height: 200px;
 
-    background-color: aqua;
 `;
 
-export default Header;
+export default LoginContainer;
