@@ -18,7 +18,7 @@ const CheckLoggedIn = () => {
           console.log(data);
           if (data.body.student !== null) {
             allRedFunc.LogStudentIn(data.body.student);
-          } else if (data.body.mentor) {
+          } else if (data.body.mentor !== null) {
             allRedFunc.LogMentorIn(data.body.mentor);
           }
         });
