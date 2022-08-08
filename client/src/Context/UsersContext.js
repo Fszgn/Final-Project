@@ -4,19 +4,28 @@ export const UsersDataContext = createContext(null);
 
 // Initial reducer state to store User Information
 const initialState = {
-  signedUser: null,
+  signedMentor:null,
+  signedStudent: null,
   loadStatus: false,
 };
 
 // Switch Cases
 const reducer = (state, action) => {
   switch (action.type) {
-    case "login-user-data":
+    case "login-Student-data":
       return {
         ...state,
-        signedUser: action.data,
+        signedMentor:null,
+        signedStudent: action.data,
         loadStatus: true,
-          };
+      };
+    case "login-Mentor-data":
+      return {
+        ...state,
+        signedStudent: null,
+        signedMentor: action.data,
+        loadStatus: true,
+      };
       case "logout-user":
           return {
             ...state,
@@ -27,28 +36,31 @@ const reducer = (state, action) => {
 };
 
 export const UserDataProvider = ({ children }) => {
+   const [userState, dispatchEvent] = useReducer(reducer, initialState);
 
-    const UserLogin = (data) => {
+    const LogStudentIn = (data) => {
         dispatchEvent({
-            type: "login-user-data",
-            data,
+          type: "login-Student-data",
+          data,
+        });
+  }
+  const LogMentorIn = (data) => {
+        dispatchEvent({
+          type: "login-Mentor-data",
+          data,
         });
     }
-    const UserLogout = (data) => {
-        dispatchEvent({
-          type: "logout-user",
-        });
-    }
-//   useEffect(() => {
-//     fetch(`/getItems`)
-//       .then((res) => res.json())
-//       .then((data) => {
-//         console.log("Get Users");
-//       });
-//   }, []);
+    const LogUserOut = (data) => {
+      dispatchEvent({
+        type: "logout-user",
+      });
+    };
+
 
   return (
-    <UsersDataContext.Provider value={{ UserLogin, UserLogout }}>
+    <UsersDataContext.Provider
+      value={{ userState, LogStudentIn, LogMentorIn, LogUserOut }}
+    >
       {children}
     </UsersDataContext.Provider>
   );

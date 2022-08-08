@@ -1,26 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles/GlobalStyles";
-
+import CheckLoggedIn from "./Components/Hooks/CheckLoggedIn";
 import Header from "./Header/Header";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import LoginStudent from "./Components/LoginContainer/LoginStudent";
 import HomeFeed from "./Components/HomeFeed";
 import LoginContainer from "./Components/LoginContainer/LoginContainer";
 import LoginMentor from "./Components/LoginContainer/loginMentor";
+import { UsersDataContext } from "./Context/UsersContext";
+
 
 const App = () => {
-  const [data, setData] = useState(null);
+const allRedFunc = useContext(UsersDataContext);
+    console.log(allRedFunc.userState);
+    CheckLoggedIn();
 
-  useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setData(data.message);
-      });
-  }, []);
 
   return (
     <Router>

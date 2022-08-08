@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import GetCookie from "../Cookie/GetCookie";
 
 const LoginContainer = () => {
   return (
@@ -33,7 +34,6 @@ const MentorButton = styled(NavLink)`
 const Container = styled.div`
   width: 100vw;
   height: 200px;
-
 `;
 
 export default LoginContainer;

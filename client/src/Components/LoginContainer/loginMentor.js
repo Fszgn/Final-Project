@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 
 const LoginMentor = () => {
-  const handleCallbackResponse = (response) => {
-    const userObj = jwt_decode(response.credential);
+  const [mentor, setMentor] = useState(null);
+
+  // update state based on the token from OAuth
+  const handleCallbackResponse = async (response) => {
+    const userObj = await jwt_decode(response.credential);
     console.log(userObj);
+    await setMentor(userObj);
   };
 
   // GOOGLE ACCOUNT LOGIN API
@@ -22,6 +26,24 @@ const LoginMentor = () => {
       size: "large",
     });
   }, []);
+
+  // calls endpoint for posting users data
+  useEffect(() => {
+    if (mentor !== null) {
+      console.log(mentor.email);
+      fetch(`/mentorLogIn`, {
+        method: "POST",
+        body: JSON.stringify({
+          mentor,
+        }),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        });
+    }
+  }, [mentor]);
 
   return (
     <div>

@@ -1,8 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 8000;
-const { studentLogedIn } = require("./handlers");
+const { studentLogedIn, mentorLogedIn, getTheUser } = require("./handlers");
 
 express()
   .use(function (req, res, next) {
@@ -16,17 +17,19 @@ express()
     );
     next();
   })
+  .use(cookieParser())
   .use(morgan("tiny"))
   .use(express.static("./server/assets"))
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
-    .use("/", express.static(__dirname + "/"))
-    
+  .use("/", express.static(__dirname + "/"))
 
-  .get("/api", (req, res) => {
-    res.status(200).json({ status: 200, message: "hello react" });
-  })
+// get the user based on the userUId from Cookie storage
+  .get("/getTheUser", getTheUser)
+  // post student email with unique sub id
   .post("/studentLogIn", studentLogedIn)
+  // post mentor email with unique sub id
+  .post("/mentorLogIn", mentorLogedIn)
 
   .listen(PORT, () => {
     console.log(`Example app listening on PORT ${PORT}`);

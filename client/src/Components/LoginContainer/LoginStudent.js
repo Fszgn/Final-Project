@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
-
+import SetCookie from "../Cookie/SetCookie";
+import GetCookie from "../Cookie/GetCookie";
 const LoginStudent = () => {
   // Store the user information
   const [student, setStudent] = useState(null);
 
+
+  // update state based on the token from OAuth
   const handleCallbackResponse = async (response) => {
     const userObj = await jwt_decode(response.credential);
-    console.log(userObj);
+    // console.log(userObj);
     await setStudent(userObj);
+    //setCookie -> id from OAuth
+    SetCookie("userUId", userObj.sub);
   };
 
   // GOOGLE ACCOUNT LOGIN API
@@ -26,14 +31,15 @@ const LoginStudent = () => {
     });
   }, []);
 
+  // calls endpoint for posting users data
   useEffect(() => {
     if (student !== null) {
-      console.log(student.email)
+      console.log(student.email);
       fetch(`/studentLogIn`, {
         method: "POST",
         body: JSON.stringify({
-         student
-      }),
+          student,
+        }),
         headers: { "Content-Type": "application/json" },
       })
         .then((res) => res.json())
