@@ -8,14 +8,12 @@ const CheckLoggedIn = () => {
   // Checks if userUnique cookie exist
   const cookie = GetCookie("userUId");
 
-  //If exists -> fetch the user data
+  //If exists -> fetch the user data from the database
   useEffect(() => {
     if (cookie !== null) {
-      console.log("there is a cookie");
       fetch(`/getTheUser`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.body.student !== null) {
             allRedFunc.LogStudentIn(data.body.student);
           } else if (data.body.mentor !== null) {

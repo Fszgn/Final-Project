@@ -24,7 +24,7 @@ const allRedFunc = useContext(UsersDataContext);
       <Wrapper>
         <Header />
         <Routes>
-          <Route path="/Home" element={<HomeFeed />} />
+          <Route path="/" element={<HomeFeed />} />
           <Route path="/LoginStudent" element={<LoginStudent />} />
           <Route path="/LoginMentor" element={<LoginMentor />} />
           <Route path="/LoginPage" element={<LoginContainer />} />
