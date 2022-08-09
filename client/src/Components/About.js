@@ -1,0 +1,76 @@
+import styled from "styled-components";
+import aboutBackground from "../assets/aboutBackground.png";
+
+const About = () => {
+  return (
+    <Container>
+      <div style={{ position: "relative", height: "100%", width: "100%" }}>
+        <ImgBack src={aboutBackground}></ImgBack>
+        <AboutParagCont>
+          <AboutParag>
+            <h1 style={{ color: "white" }}>Our Mission</h1>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac
+            porta ante. Suspendisse risus felis, ornare a pretium pulvinar,
+            luctus nec orci. Vivamus malesuada nisl quis urna mattis, ut ornare
+            urna fermentum. Nullam consectetur mollis sem. In vestibulum gravida
+            laoreet. Curabitur blandit tincidunt risus, in blandit nulla mattis
+            eu. Donec sed euismod purus, sit amet aliquam urna. Class aptent
+            taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+            himenaeos. Vivamus sit amet mollis nulla, eget laoreet mauris. Etiam
+            cursus rhoncus eros, vehicula porta nulla lacinia quis. Phasellus
+            ultricies in est eu suscipit. Morbi euismod mattis auctor. Duis
+            lobortis velit vitae cursus imperdiet. Cras vel sagittis odio.
+            Nullam odio erat, sagittis nec arcu vel, fringilla aliquam est.
+            Etiam
+          </AboutParag>
+        </AboutParagCont>
+      </div>
+    </Container>
+  );
+};
+
+
+
+const ImgBack = styled.img`
+  width: 100%;
+  height: 100%;
+
+  z-index: 0;
+`;
+const AboutParagCont = styled.div`
+  width: 80vw;
+  height: 80vh;
+  z-index: 1;
+  color: white;
+  position: absolute;
+  top: 0%;
+
+  background-color: rgba(21, 0, 44, 0.27);
+
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+const AboutParag = styled.p`
+  color: white;
+  width: 40vw;
+  height: 40vh;
+
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+const Container = styled.div`
+  width: 80vw;
+  height: 80vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  margin: 30px 0 30px 0;
+`;
+export default About;

@@ -11,6 +11,8 @@ const {
   getTheUser,
   userGen,
   getTheMentors,
+  fetchCity,
+  findEachUser,
 } = require("./handlers");
 
 express()
@@ -42,6 +44,10 @@ express()
   .post("/mentorLogIn", mentorLogedIn)
   //get the Mentors based on city
   .get("/getTheMentors", getTheMentors)
+  // get City info by location
+  .get("/fetchCity", fetchCity)
+  // get City info by location
+  .get("/findEachUser/:id", findEachUser)
   .listen(PORT, () => {
     console.log(`Example app listening on PORT ${PORT}`);
   });

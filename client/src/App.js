@@ -10,7 +10,7 @@ import HomeFeed from "./Components/HomeFeed";
 import LoginContainer from "./Components/LoginContainer/LoginContainer";
 import LoginMentor from "./Components/LoginContainer/loginMentor";
 import { UsersDataContext } from "./Context/UsersContext";
-
+import About from "./Components/About";
 
 const App = () => {
 const allRedFunc = useContext(UsersDataContext);
@@ -28,12 +28,14 @@ const allRedFunc = useContext(UsersDataContext);
           <Route path="/LoginStudent" element={<LoginStudent />} />
           <Route path="/LoginMentor" element={<LoginMentor />} />
           <Route path="/LoginPage" element={<LoginContainer />} />
+          <Route path="/About" element={<About />} />
         </Routes>
       </Wrapper>
     </Router>
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+`;
 
 export default App;

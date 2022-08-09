@@ -1,13 +1,31 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import greenPic from "../assets/green future.png"
 
 
 
-const MentorCard = ({ el }) => {
+const MentorCard = ({
+  el,
+  detailedUser,
+  setdetailedUser,
+  setshowDetailedCard,
+}) => {
+  let nav = useNavigate();
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    fetch(`/findEachUser/${el._id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setdetailedUser(data.body);
+        setshowDetailedCard(true);
+      });
+  };
   return (
     <Container>
-      <MentorCardDiv>
+      <MentorCardDiv onClick={handleClick}>
         <ProfileImg src={el.picture}></ProfileImg>
 
         <InfoContainer>
@@ -62,7 +80,7 @@ const MentorCardDiv = styled.div`
   border: 1px solid;
   margin-top: 10px;
   border-radius: 10px;
-  padding: 70px;
+  padding: 50px;
 `;
 const Container = styled.div`
   width: 80%;

@@ -1,6 +1,7 @@
 "use strict";
 const request = require("request-promise");
 const { MongoClient, ObjectId } = require("mongodb");
+var NodeGeocoder = require("node-geocoder");
 
 require("dotenv").config("./.env");
 const { MONGO_URI } = process.env;
@@ -225,10 +226,54 @@ const getTheMentors = async (req, res) => {
   }
 };
 
+
+// return the user's address info based on coordinates  !!!####!!!!!-------->>>>>>>
+const fetchCity = async (req, res) => {
+
+  var options = {
+    provider: "google",
+    httpAdapter: "https", // Default
+    apiKey: "AIzaSyBjOT4aHLleLQuDsS_L-w57cX09YJiE1r0", // for Mapquest, OpenCage, Google Premier
+    formatter: "json", // 'gpx', 'string', ...
+  };
+
+  var geocoder = NodeGeocoder(options);
+
+  geocoder.reverse({ lat: 28.5967439, lon: 77.3285038 }, function (err, res) {
+    console.log(res);
+  });
+}
+
+//Get each user
+const findEachUser = async (req, res) => {
+  const uniqueId = req.params.id
+const client = new MongoClient(MONGO_URI, options);
+await client.connect();
+try {
+  const db = client.db("finalpro");
+  const getTheUser = await db
+    .collection("mentors")
+    .findOne({ _id: uniqueId })
+
+  return res.status(200).json({
+    status: 200,
+    body: getTheUser,
+    success: true,
+  });
+} catch (err) {
+  console.log(err.message);
+} finally {
+  client.close();
+}
+
+};
+
 module.exports = {
   studentLogedIn,
   mentorLogedIn,
   getTheUser,
   userGen,
   getTheMentors,
+  fetchCity,
+  findEachUser,
 };

@@ -12,7 +12,7 @@ export default createGlobalStyle`
 
     margin:0;
     padding: 0;
-   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+font-family: 'Roboto', sans-serif;
 }
 h1{
 color:var(--color-green);
