@@ -3,6 +3,8 @@ import styled from "styled-components";
 import About from "./About";
 import DetailedCard from "./DetailedCard";
 import MentorCard from "./MentorCard";
+
+
 const HomeFeed = () => {
   //state saves user locations coordinates
   const [loc, setLoc] = useState(null)
@@ -48,7 +50,7 @@ const HomeFeed = () => {
         {showDetailedCard && (
           <DetailedCard
             setshowDetailedCard={setshowDetailedCard}
-            detailedUser={detailedUser}
+            user={detailedUser}
           />
         )}
         <About />

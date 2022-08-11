@@ -1,35 +1,28 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import greenPic from "../assets/green future.png";
-import {
-  LocationOn,
-  Send,
-  Badge,
-  CoPresent,
-} from "@mui/icons-material";
+import { LocationOn, Send, Badge, CoPresent } from "@mui/icons-material";
 
-const MentorCard = ({
-  el,
-  detailedUser,
-  setdetailedUser,
-  setshowDetailedCard,
-}) => {
+const ProfilePage = () => {
+  let userId = useParams();
+  const [el, setEl] = useState(null)
 
 
-  const handleClick = (event) => {
-    event.preventDefault();
-    fetch(`/findEachUser/${el._id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setdetailedUser(data.body);
-        setshowDetailedCard(true);
-      });
-  };
+
+  if (userId.id) {
+    console.log(userId.id.length)
+        fetch(`/findEachUser/${userId.id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            setEl(data.body);
+          });
+  }
+
+  
   return (
     <Container>
-      <MentorCardDiv onClick={handleClick}>
+      {el?(<MentorCardDiv >
         <ProfileImg src={el.picture}></ProfileImg>
 
         <InfoContainer>
@@ -71,7 +64,7 @@ const MentorCard = ({
         ) : (
           <div style={{ width: "30px", height: "50px" }}></div>
         )}
-      </MentorCardDiv>
+      </MentorCardDiv>):(null)}
     </Container>
   );
 };
@@ -97,23 +90,26 @@ const ProfileImg = styled.img`
   width: 95px;
 `;
 const MentorCardDiv = styled.div`
-  width: 70%;
+  width: 70vw;
+  min-height: 55vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
 
   border: 1px solid;
-  margin-top: 10px;
   border-radius: 10px;
+
+  margin-top: 10px;
   padding: 50px;
 `;
 const Container = styled.div`
-  width: 80%;
+
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
 `;
 
-export default MentorCard;
+export default ProfilePage;

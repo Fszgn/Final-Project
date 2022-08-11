@@ -7,8 +7,20 @@ const About = () => {
       <div style={{ position: "relative", height: "100%", width: "100%" }}>
         <ImgBack src={aboutBackground}></ImgBack>
         <AboutParagCont>
-          <AboutParag>
+          <AboutParag style={{ fontSize: "23px" }}>
             <h1 style={{ color: "white" }}>Our Mission</h1>
+            This website aims to match mentors and students on variety of
+            topics. Whenever the MENTOR have the special icon on his Card, it
+            represents that the student will have the oppurtunity to have the
+            "GREEN MENTORSHIP" experience.{" "}
+          </AboutParag>
+          <div style={{ width: "30px", height: "30px" }}></div>
+          <AboutParag style={{ fontSize: "23px" }}>
+                      "GREEN MENTORSHIP" offers unique scientific experiments to raise AWARENESS on GLOBAL ISSUES.{" "}
+                      
+          </AboutParag>
+          <div style={{ width: "30px", height: "20px" }}></div>
+          <AboutParag style={{ fontSize: "14px" }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac
             porta ante. Suspendisse risus felis, ornare a pretium pulvinar,
             luctus nec orci. Vivamus malesuada nisl quis urna mattis, ut ornare
@@ -16,12 +28,7 @@ const About = () => {
             laoreet. Curabitur blandit tincidunt risus, in blandit nulla mattis
             eu. Donec sed euismod purus, sit amet aliquam urna. Class aptent
             taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-            himenaeos. Vivamus sit amet mollis nulla, eget laoreet mauris. Etiam
-            cursus rhoncus eros, vehicula porta nulla lacinia quis. Phasellus
-            ultricies in est eu suscipit. Morbi euismod mattis auctor. Duis
-            lobortis velit vitae cursus imperdiet. Cras vel sagittis odio.
-            Nullam odio erat, sagittis nec arcu vel, fringilla aliquam est.
-            Etiam
+            himenaeos.
           </AboutParag>
         </AboutParagCont>
       </div>
@@ -55,7 +62,7 @@ const AboutParagCont = styled.div`
 const AboutParag = styled.p`
   color: white;
   width: 40vw;
-  height: 40vh;
+
 
   align-items: center;
   display: flex;

@@ -4,7 +4,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 var NodeGeocoder = require("node-geocoder");
 
 require("dotenv").config("./.env");
-const { MONGO_URI } = process.env;
+const { MONGO_URI, GOOGLE_MAP_API } = process.env;
 
 const options = {
   useNewUrlParser: true,
@@ -147,7 +147,6 @@ const studentLogedIn = async (req, res) => {
   } finally {
     client.close();
   }
-
 };
 // Insert logedin Mentor information into Mongodb
 const mentorLogedIn = async (req, res) => {
@@ -209,10 +208,8 @@ const getTheMentors = async (req, res) => {
     const db = client.db("finalpro");
     const getTheUser = await db
       .collection("mentors")
-      .find({city:"Montreal"})
+      .find({ city: "Montreal" })
       .toArray();
-
-    
 
     return res.status(200).json({
       status: 200,
@@ -226,14 +223,12 @@ const getTheMentors = async (req, res) => {
   }
 };
 
-
 // return the user's address info based on coordinates  !!!####!!!!!-------->>>>>>>
 const fetchCity = async (req, res) => {
-
   var options = {
     provider: "google",
     httpAdapter: "https", // Default
-    apiKey: "AIzaSyBjOT4aHLleLQuDsS_L-w57cX09YJiE1r0", // for Mapquest, OpenCage, Google Premier
+    apiKey: GOOGLE_MAP_API, // for Mapquest, OpenCage, Google Premier
     formatter: "json", // 'gpx', 'string', ...
   };
 
@@ -242,30 +237,29 @@ const fetchCity = async (req, res) => {
   geocoder.reverse({ lat: 28.5967439, lon: 77.3285038 }, function (err, res) {
     console.log(res);
   });
-}
+};
 
 //Get each user
 const findEachUser = async (req, res) => {
-  const uniqueId = req.params.id
-const client = new MongoClient(MONGO_URI, options);
-await client.connect();
-try {
-  const db = client.db("finalpro");
-  const getTheUser = await db
-    .collection("mentors")
-    .findOne({ _id: uniqueId })
+  const uniqueId = req.params.id;
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const db = client.db("finalpro");
+    const getTheUser = await db
+      .collection("mentors")
+      .findOne({ _id: uniqueId });
 
-  return res.status(200).json({
-    status: 200,
-    body: getTheUser,
-    success: true,
-  });
-} catch (err) {
-  console.log(err.message);
-} finally {
-  client.close();
-}
-
+    return res.status(200).json({
+      status: 200,
+      body: getTheUser,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    client.close();
+  }
 };
 
 module.exports = {

@@ -1,9 +1,27 @@
 const express = require("express");
-const morgan = require("morgan");
-const request = require("request");
-
 const cookieParser = require("cookie-parser");
-const app = express();
+const cors = require("cors");
+const app = require("express")();
+const httpServer = require("http").createServer(app);
+const options = {
+  /* ... */ cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+};
+const io = require("socket.io")(httpServer, options);
+
+io.on("connection", (socket) => {
+  /* ... */
+  socket.on("send_message", (data) => {
+    console.log(data);
+    socket.broadcast.emit("receive_message", data);
+  })
+});
+
+httpServer.listen(8001);
+
+
 const PORT = 8000;
 const {
   studentLogedIn,
@@ -28,7 +46,7 @@ express()
     next();
   })
   .use(cookieParser())
-  .use(morgan("tiny"))
+  .use(cors())
   .use(express.static("./server/assets"))
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
@@ -51,3 +69,4 @@ express()
   .listen(PORT, () => {
     console.log(`Example app listening on PORT ${PORT}`);
   });
+

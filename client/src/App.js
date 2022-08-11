@@ -11,6 +11,7 @@ import LoginContainer from "./Components/LoginContainer/LoginContainer";
 import LoginMentor from "./Components/LoginContainer/loginMentor";
 import { UsersDataContext } from "./Context/UsersContext";
 import About from "./Components/About";
+import ProfilePage from "./Components/ProfilePage";
 
 const App = () => {
 const allRedFunc = useContext(UsersDataContext);
@@ -24,6 +25,7 @@ const allRedFunc = useContext(UsersDataContext);
       <Wrapper>
         <Header />
         <Routes>
+          <Route path="/fullProfile/:id" element={<ProfilePage />} />
           <Route path="/" element={<HomeFeed />} />
           <Route path="/LoginStudent" element={<LoginStudent />} />
           <Route path="/LoginMentor" element={<LoginMentor />} />
