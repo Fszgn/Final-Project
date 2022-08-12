@@ -63,7 +63,7 @@ express()
   // post mentor email with unique sub id
   .post("/mentorLogIn", mentorLogedIn)
   //get the Mentors based on city
-  .get("/getTheMentors", getTheMentors)
+  .get("/getTheMentors/:city", getTheMentors)
   // get City info by location
   .get("/fetchCity", fetchCity)
   // get City info by location

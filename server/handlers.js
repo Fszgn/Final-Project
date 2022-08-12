@@ -202,20 +202,46 @@ const getTheUser = async (req, res) => {
 
 // receives Mentors data from DataBase
 const getTheMentors = async (req, res) => {
+  console.log(req.params)
+  let cityName = req.params.city;
+
+  // if (req.params.city === "null") {
+  //   cityName = "Montreal";
+  //   console.log("cityName");
+  // }
+    console.log(cityName);
+  
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   try {
     const db = client.db("finalpro");
-    const getTheUser = await db
-      .collection("mentors")
-      .find({ city: "Montreal" })
-      .toArray();
 
-    return res.status(200).json({
-      status: 200,
-      body: getTheUser,
-      success: true,
-    });
+    // if the parameter is empty
+    if (cityName === "null") {
+      const allTheUser = await db
+        .collection("mentors")
+        .find({ city: "Montreal" })
+        .toArray();
+      return res.status(200).json({
+        status: 200,
+        body: allTheUser,
+        success: true,
+      });
+    }
+
+    // if the parameter is NOT empty
+    else if (cityName !== "null") {
+      const getTheUser = await db
+        .collection("mentors")
+        .find({ city: cityName })
+        .toArray();
+
+      return res.status(200).json({
+        status: 200,
+        body: getTheUser,
+        success: true,
+      });
+    }
   } catch (err) {
     console.log(err.message);
   } finally {

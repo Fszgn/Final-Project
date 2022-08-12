@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import About from "./About";
 import DetailedCard from "./DetailedCard";
+import Filter from "./Filter";
 import MentorCard from "./MentorCard";
 
 const HomeFeed = () => {
@@ -18,20 +19,29 @@ const HomeFeed = () => {
   const [detailedUser, setdetailedUser] = useState(false);
   //state open/close detailedUserCard
   const [showDetailedCard, setshowDetailedCard] = useState(false);
-  //func gets user location's coord's
+  //state search by Name
+  const [searchName, setSearchName] = useState("");
+  //state search by City
+  const [searchCity, setSearchCity] = useState(null);
+  //state search by Course
+  const [searchCourse, setSearchCourse] = useState("Music");
 
+  //
+
+  // MOdifies index to Show next 10 item
   const handleNext = () => {
     if (mentorList !== null) {
-      if (indexList + 10 > mentorList.length) {
+      if (indexList + 10 >= mentorList.length) {
         setIndexList(mentorList.length - 10);
         settrigger(!trigger);
         return;
       }
       settrigger(!trigger);
       setIndexList(indexList + 10);
-      console.log(indexList);
     }
   };
+
+  // MOdifies index to Show Previous 10 item
   const handlePrev = () => {
     if (mentorList !== null) {
       if (indexList - 10 < 0) {
@@ -41,43 +51,57 @@ const HomeFeed = () => {
       }
       settrigger(!trigger);
       setIndexList(indexList - 10);
-      console.log(indexList);
     }
   };
+  // GEt user Location
   useEffect(() => {
     if (navigator?.geolocation) {
       navigator.geolocation.getCurrentPosition((location) => {
         if (location) {
-          console.log(location.coords);
           setLoc(location.coords);
         }
       });
     }
   }, []);
 
-  // get current cuty info by using coordinates
-  // useEffect(() => {
-  //   if (loc) {
-  //     fetch(`/fetchCity`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log(data.body);
-  //       });
-  //   }
-  // }, [loc]);
+  //  REceive Mentors data from the server
+  useEffect( () => {
+//     if (searchCity.length < 1) {
+      
+//       console.log(typeof searchCity);
+//       await setSearchCity("Ottawa")
 
-  useEffect(() => {
-    fetch(`/getTheMentors`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.body);
-        setmentorList(data.body);
+// }
+  fetch(`/getTheMentors/${searchCity}`)
+    .then((res) => res.json())
+    .then( (data) => {
+      // FILTER by first name
+      const filterByName = data.body.filter((el) => {
+        return el.firstName.toLowerCase().includes(searchName);
       });
+      return filterByName;
+    })
+    .then((data) => {
+      
+      console.log(data)
+      // FILTER by course name
+      console.log(typeof searchCity);
+      const filteredByCoursse = data.filter((el) => {
+        let nestedArry = el.mentroship.filter((course) => {
+          return course.toLowerCase() === searchCourse.toLowerCase();
+        });
+        return nestedArry.length > 0;
+      });
+      setmentorList(filteredByCoursse);
+      return filteredByCoursse;
+    })
+    .then((data) => {
+      console.log(data);
+    });
   }, [trigger]);
 
   return (
     <Container>
-      {" "}
       {showDetailedCard && (
         <DetailedCard
           setshowDetailedCard={setshowDetailedCard}
@@ -85,6 +109,14 @@ const HomeFeed = () => {
         />
       )}
       <About />
+      <Filter
+        setSearchName={setSearchName}
+        setSearchCity={setSearchCity}
+        setSearchCourse={setSearchCourse}
+        searchName={searchName}
+        settrigger={settrigger}
+        trigger={trigger}
+      />
       {mentorList ? (
         mentorList.slice(indexList, indexList + 10).map((el) => {
           return (
