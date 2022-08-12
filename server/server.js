@@ -31,6 +31,8 @@ const {
   getTheMentors,
   fetchCity,
   findEachUser,
+  postReview,
+  deleteReview,
 } = require("./handlers");
 
 express()
@@ -66,6 +68,10 @@ express()
   .get("/fetchCity", fetchCity)
   // get City info by location
   .get("/findEachUser/:id", findEachUser)
+  // post new mentor's review
+  .put("/postReview/:id", postReview)
+  // DELETE a review
+  .delete("/deleteReview/:id", deleteReview)
   .listen(PORT, () => {
     console.log(`Example app listening on PORT ${PORT}`);
   });

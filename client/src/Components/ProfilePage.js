@@ -1,74 +1,363 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import greenPic from "../assets/green future.png";
-import { LocationOn, Send, Badge, CoPresent } from "@mui/icons-material";
+import {
+  LocationOn,
+  Send,
+  Badge,
+  CoPresent,
+  Twitter,
+  LinkedIn,
+  Facebook,
+  Email,
+  SignalCellular4Bar,
+  Comment,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
+import { io } from "socket.io-client";
+
+const socket = io.connect("http://localhost:8001");
 
 const ProfilePage = () => {
+  const [trigger, setTrigger] = useState(false);
+  const [review, setReview] = useState(null);
+
+  const [messg, setmessg] = useState("");
+  const [messgRC, setmessgRC] = useState("");
   let userId = useParams();
-  const [el, setEl] = useState(null)
+  const [el, setEl] = useState(null);
+  //SOCKET.IO RECEIVE MESSAGE
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setmessgRC(data.message);
+    });
+  }, [socket]);
+  socket.on("connection", () => {
+    console.log("first");
+  });
 
+  //SOCKET.IO SEND MESSAGE
+  const sendMessage = (data) => {
+    socket.emit("send_message", { message: messg });
+  };
 
+  // Post a new review
+  const handleClick = () => {
+    console.log(review);
+    fetch(`/postReview/${userId.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        text: review,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setReview({});
+       setTrigger(!trigger);
+      });
+  };
+ // Remove a review
+  const handleRemove = (ev,param) => {
+    console.log(param);
+    console.log(review);
+    fetch(`/deleteReview/${userId.id}`, {
+      method: "DELETE",
+      body: JSON.stringify({
+        text: review,
+        id: param,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setReview({});
+        setTrigger(!trigger);
+      });
+  };
 
-  if (userId.id) {
-    console.log(userId.id.length)
-        fetch(`/findEachUser/${userId.id}`)
-          .then((res) => res.json())
-          .then((data) => {
-            setEl(data.body);
-          });
-  }
+  //Redo fetch req in order to receive reviews upon POST one
+  useEffect(() => {
+    if (userId.id) {
+      // console.log(userId.id.length);
+      fetch(`/findEachUser/${userId.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setEl(data.body);
+          console.log(data.body);
+        });
+    }
+  }, [review, trigger]);
 
-  
   return (
     <Container>
-      {el?(<MentorCardDiv >
-        <ProfileImg src={el.picture}></ProfileImg>
+      {el ? (
+        <Wrapper>
+          <MentorCardDiv>
+            <ProfileImg src={el.picture}></ProfileImg>
 
-        <InfoContainer>
-          <ul>
-            <LI>
-              <CoPresent />
-              <p style={{ marginLeft: "15px" }}>
-                {el.firstName} {el.lastName}
-              </p>
-            </LI>
-            <LI>
-              <LocationOn />
-              <p style={{ marginLeft: "15px" }}>{el.city}</p>
-            </LI>
-            <LI>
-              <Send />
-              <p style={{ marginLeft: "15px" }}>{el.email}</p>
-            </LI>
-            <LI>
-              <Badge />
-              {el.mentroship.map((el) => (
-                <p style={{ marginLeft: "15px" }}>{el}</p>
-              ))}
-            </LI>
-          </ul>
-        </InfoContainer>
-        <ActivityInfo>
-          {" "}
-          <ul>
-            <LI>{el.mentroship[0]}</LI>
-            <LI>{el.mentroship[1]}</LI>
-            <LI>{el.mentroship[2]}</LI>
-          </ul>
-        </ActivityInfo>
-        {el.isGreen ? (
-          <IsGreen>
-            <GreenImg src={greenPic}></GreenImg>
-          </IsGreen>
-        ) : (
-          <div style={{ width: "30px", height: "50px" }}></div>
-        )}
-      </MentorCardDiv>):(null)}
+            <InfoContainer>
+              <ul>
+                {" "}
+                <h1> Info</h1>
+                <LI>
+                  <CoPresent />
+                  <p style={{ marginLeft: "15px" }}>
+                    {el.firstName} {el.lastName}
+                  </p>
+                </LI>
+                <LI>
+                  <LocationOn />
+                  <p style={{ marginLeft: "15px" }}>{el.city}</p>
+                </LI>
+                <LI>
+                  <Send
+                    onClick={() => (window.location = `mailto:${el.email}`)}
+                  />
+                  <p
+                    onClick={() => (window.location = `mailto:${el.email}`)}
+                    style={{ marginLeft: "15px" }}
+                  >
+                    {el.email}
+                  </p>
+                </LI>
+                <LI>
+                  <Badge />
+                  {el.mentroship.map((el) => (
+                    <p style={{ marginLeft: "15px" }}>{el}</p>
+                  ))}
+                </LI>
+              </ul>
+            </InfoContainer>
+            <ActivityInfo>
+              {" "}
+              <ul>
+                <h1> Mentorship</h1>
+                <LI>{el.mentroship[0]}</LI>
+                <LI>{el.mentroship[1]}</LI>
+                <LI>{el.mentroship[2]}</LI>
+              </ul>
+            </ActivityInfo>
+            <div>
+              {el.isGreen ? (
+                <IsGreen style={{ marginTop: "30px", marginLeft: "110px" }}>
+                  <GreenImg src={greenPic}></GreenImg>
+                </IsGreen>
+              ) : (
+                <div style={{ width: "30px", height: "50px" }}></div>
+              )}
+              <div style={{ marginTop: "30px" }}>
+                <Email
+                  style={{
+                    color: "#1976d2",
+                    fontSize: "55px",
+                    marginLeft: "25px",
+                  }}
+                />{" "}
+                <Twitter
+                  style={{
+                    color: "#1976d2",
+                    fontSize: "55px",
+                    marginLeft: "25px",
+                  }}
+                />
+                <LinkedIn
+                  style={{
+                    color: "#1976d2",
+                    fontSize: "55px",
+                    marginLeft: "25px",
+                  }}
+                />
+                <Facebook
+                  style={{
+                    color: "#1976d2",
+                    fontSize: "55px",
+                    marginLeft: "25px",
+                  }}
+                />
+              </div>
+            </div>
+          </MentorCardDiv>
+          <Review>
+            <ReviewCont>
+              {" "}
+              <h1>Reviews</h1>
+              <ReviewEntryWrap>
+                <ReviewEntry
+                  onChange={(ev) => {
+                    setReview((review) => ({
+                      ...review,
+                      time: new Date().getMilliseconds(),
+                      text: ev.target.value,
+                    }));
+                  }}
+                  value={review?.text}
+                  placeholder="Review..."
+                  type="text"
+                >
+                  {review}
+                </ReviewEntry>
+                <ReviewBtn
+                  onClick={handleClick}
+                  type="submit"
+                  value="Submit"
+                >
+                  <Comment
+                    style={{
+                      marginRight: "15px",
+                    }}
+                  />
+                  Leave a Comment{" "}
+                </ReviewBtn>
+              </ReviewEntryWrap>
+              <Reviews>
+                {el.reviews ? (
+                  el.reviews.map((review) => {
+                    return (
+                      <LIReview>
+                        <SignalCellular4Bar
+                          style={{
+                            marginRight: "15px",
+                          }}
+                        />
+                        {review.text}
+                        {review.time}
+                        <RemoveCircleOutline
+                          value={review.time}
+                          onClick={(ev)=>handleRemove(ev, review.time)}
+                          style={{
+                            marginLeft: "15px",
+                          }}
+                        />
+                      </LIReview>
+                    );
+                  })
+                ) : (
+                  <LIReview>
+                    <SignalCellular4Bar
+                      style={{
+                        marginRight: "15px",
+                      }}
+                    />
+                    No Comment Yet
+                  </LIReview>
+                )}
+              </Reviews>
+            </ReviewCont>
+          </Review>
+          {/* <h1>message received: {messgRC}</h1>
+           
+            <input
+              onChange={(event) => {
+                setmessg(event.target.value);
+              }}
+              placeholder="Mesage..."
+            />
+            <button onClick={sendMessage}>send message</button> */}
+        </Wrapper>
+      ) : null}
     </Container>
   );
 };
 
+const LIReview = styled.div`
+  list-style: none;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+
+  padding: 10px;
+`;
+const ReviewEntry = styled.textarea`
+  margin-bottom: 10px;
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+  color: #3b3b3b;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 50px;
+  padding: 5px;
+  min-width: 280px;
+`;
+const ReviewBtn = styled.button`
+  margin-bottom: 10px;
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+  color: #3b3b3b;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 60px;
+  margin-left: 25px;
+
+  outline: none;
+  padding: 12px 18px;
+  text-align: center;
+  text-decoration: none;
+  &:hover {
+    transition-property: all;
+    transition-duration: 300ms;
+    transform: translate(0, -2px);
+    background-color: #3b3b3b;
+    color: white;
+  }
+`;
+const ReviewEntryWrap = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin: 20px 0 20px 0;
+`;
+const ReviewCont = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+`;
+const Wrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+
+  border: 1px solid;
+  border-radius: 15px;
+
+  width: 75vw;
+  min-height: fit-content;
+
+  margin-top: 30px;
+`;
+
+const Reviews = styled.div`
+  min-height: 40%;
+`;
+
+const Review = styled.div`
+  width: 100%;
+  min-height: 40%;
+  z-index: 2;
+  position: relative;
+
+  margin-bottom: 100px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+`;
 const GreenImg = styled.img`
   border-radius: 100px;
   height: 45px;
@@ -91,25 +380,19 @@ const ProfileImg = styled.img`
 `;
 const MentorCardDiv = styled.div`
   width: 70vw;
-  min-height: 55vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   flex-direction: row;
-
-  border: 1px solid;
-  border-radius: 10px;
 
   margin-top: 10px;
   padding: 50px;
 `;
 const Container = styled.div`
-
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
 `;
 
 export default ProfilePage;

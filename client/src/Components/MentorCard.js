@@ -34,6 +34,8 @@ const MentorCard = ({
 
         <InfoContainer>
           <ul>
+            {" "}
+            <h1> Info</h1>
             <LI>
               <CoPresent />
               <p style={{ marginLeft: "15px" }}>
@@ -59,6 +61,8 @@ const MentorCard = ({
         <ActivityInfo>
           {" "}
           <ul>
+            {" "}
+            <h1> Mentorship</h1>
             <LI>{el.mentroship[0]}</LI>
             <LI>{el.mentroship[1]}</LI>
             <LI>{el.mentroship[2]}</LI>
@@ -103,12 +107,14 @@ const MentorCardDiv = styled.div`
   justify-content: space-between;
   flex-direction: row;
 
-  border: 1px solid;
+  border: 1px solid transparent;
+  box-shadow: 0px 14px 32px -6px rgba(66, 66, 66, 0.8);
   margin-top: 10px;
   border-radius: 10px;
   padding: 50px;
 `;
 const Container = styled.div`
+margin-top: 2%;
   width: 80%;
   display: flex;
   align-items: center;

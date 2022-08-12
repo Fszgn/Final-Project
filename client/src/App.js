@@ -14,15 +14,14 @@ import About from "./Components/About";
 import ProfilePage from "./Components/ProfilePage";
 
 const App = () => {
-const allRedFunc = useContext(UsersDataContext);
-    console.log(allRedFunc.userState);
+
     CheckLoggedIn();
 
 
   return (
     <Router>
       <GlobalStyles />
-      <Wrapper>
+      <>
         <Header />
         <Routes>
           <Route path="/fullProfile/:id" element={<ProfilePage />} />
@@ -32,12 +31,10 @@ const allRedFunc = useContext(UsersDataContext);
           <Route path="/LoginPage" element={<LoginContainer />} />
           <Route path="/About" element={<About />} />
         </Routes>
-      </Wrapper>
+      </>
     </Router>
   );
 };
 
-const Wrapper = styled.div`
-`;
 
 export default App;

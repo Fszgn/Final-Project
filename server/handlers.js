@@ -186,7 +186,7 @@ const getTheUser = async (req, res) => {
       _id: req.cookies.userUId,
     });
 
-    console.log(getTheUser, "mntr->", getTheUserMnt);
+    // console.log(getTheUser, "mntr->", getTheUserMnt);
 
     return res.status(200).json({
       status: 200,
@@ -262,6 +262,55 @@ const findEachUser = async (req, res) => {
   }
 };
 
+//UPDATE review mentor's Database
+const postReview = async (req, res) => {
+  const uniqueId = req.params.id;
+  const rev = req.body.text;
+  console.log(rev)
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const db = client.db("finalpro");
+    const insertReview = await db
+      .collection("mentors")
+      .updateOne({ _id: uniqueId }, { $push: { reviews: rev } });
+
+    return res.status(200).json({
+      status: 200,
+      body: insertReview,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    client.close();
+  }
+};
+
+//UPDATE review mentor's Database
+const deleteReview = async (req, res) => {
+  const uniqueId = req.params.id;
+  const revId = req.body.id;
+console.log(uniqueId,req.body)
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const db = client.db("finalpro");
+    const insertReview = await db
+      .collection("mentors")
+      .updateOne({ _id: uniqueId }, { $pull: { reviews: { time: revId } } });
+
+    return res.status(200).json({
+      status: 200,
+      body: insertReview,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    client.close();
+  }
+};
 module.exports = {
   studentLogedIn,
   mentorLogedIn,
@@ -270,4 +319,6 @@ module.exports = {
   getTheMentors,
   fetchCity,
   findEachUser,
+  postReview,
+  deleteReview,
 };
