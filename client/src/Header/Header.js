@@ -1,23 +1,25 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
-import { UsersDataContext } from "../Context/UsersContext";
+import { UsersDataContext } from "../Components/Context/UsersContext";
 import greenPic from "../assets/green future.png"
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Cookie from "js-cookie";
 
-const Header = () => {
+const Header = ({ trigger, settrigger }) => {
   //consume reducer State
   const allRedFunc = useContext(UsersDataContext);
   // checks if the user data loaded
   const isUserSignedIn = allRedFunc.userState.loadStatus;
-  console.log(allRedFunc.userState.loadStatus);
-  
+
+  //Logs the user out
   const handleLogout = () => {
     allRedFunc.LogUserOut();
     Cookie.remove("userUId");
-  }
+    settrigger(!trigger);
+    window.alert("You are Signed Out")
+  };
   return (
     <Container>
       <HomeButton to="/">
@@ -33,7 +35,7 @@ const Header = () => {
             width: "45px",
             height: "45px",
           }}
-          to="/LoginPage"
+          to="/"
         >
           <LogoutIcon
             style={{ color: "#FFDE59", width: "45px", height: "45px" }}

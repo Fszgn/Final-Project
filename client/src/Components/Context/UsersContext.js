@@ -4,9 +4,10 @@ export const UsersDataContext = createContext(null);
 
 // Initial reducer state to store User Information
 const initialState = {
-  signedMentor:null,
+  signedMentor: null,
   signedStudent: null,
   loadStatus: false,
+  direcMessageContainer: false,
 };
 
 // Switch Cases
@@ -15,7 +16,7 @@ const reducer = (state, action) => {
     case "login-Student-data":
       return {
         ...state,
-        signedMentor:null,
+        signedMentor: null,
         signedStudent: action.data,
         loadStatus: true,
       };
@@ -26,12 +27,25 @@ const reducer = (state, action) => {
         signedMentor: action.data,
         loadStatus: true,
       };
-      case "logout-user":
-          return {
-            ...state,
-            signedUser: null,
-          };
-      default:
+    case "direct-message-open":
+      return {
+        ...state,
+        direcMessageContainer: true,
+      };
+    case "direct-message-close":
+      return {
+        ...state,
+        direcMessageContainer: false,
+      };
+    case "logout-user":
+      return {
+        ...state,
+        signedMentor: null,
+        signedStudent: null,
+        loadStatus: false,
+        direcMessageContainer: false,
+      };
+    default:
   }
 };
 
@@ -56,10 +70,34 @@ export const UserDataProvider = ({ children }) => {
       });
     };
 
-
+  const directMessageOpen = (data) => {
+    console.log("directMessageOpen");
+      dispatchEvent({
+        type: "direct-message-open",
+      });
+    };
+   const directMessageClose = (data) => {
+      dispatchEvent({
+        type: "direct-message-close",
+      });
+  };
+  
+  
+  
+  
+  
+  
+  
   return (
     <UsersDataContext.Provider
-      value={{ userState, LogStudentIn, LogMentorIn, LogUserOut }}
+      value={{
+        userState,
+        LogStudentIn,
+        LogMentorIn,
+        LogUserOut,
+        directMessageOpen,
+        directMessageClose,
+      }}
     >
       {children}
     </UsersDataContext.Provider>

@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
+import { UsersDataContext } from "./Context/UsersContext";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
 import greenPic from "../assets/green future.png";
+import { FiLoader } from "react-icons/fi";
 import {
   LocationOn,
   Send,
@@ -14,33 +16,25 @@ import {
   SignalCellular4Bar,
   Comment,
   RemoveCircleOutline,
+  QuestionAnswerOutlined,
 } from "@mui/icons-material";
 import { io } from "socket.io-client";
 
 const socket = io.connect("http://localhost:8001");
 
 const ProfilePage = () => {
+  const nav = useNavigate();
+  //User's Context
+  const allRedFunc = useContext(UsersDataContext);
+  //State for Triggering various Functions
   const [trigger, setTrigger] = useState(false);
+  // State for saving review text onChange
   const [review, setReview] = useState(null);
 
-  const [messg, setmessg] = useState("");
-  const [messgRC, setmessgRC] = useState("");
+  //userId
   let userId = useParams();
+  //State for saving Each Mentor information
   const [el, setEl] = useState(null);
-  //SOCKET.IO RECEIVE MESSAGE
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setmessgRC(data.message);
-    });
-  }, [socket]);
-  socket.on("connection", () => {
-    console.log("first");
-  });
-
-  //SOCKET.IO SEND MESSAGE
-  const sendMessage = (data) => {
-    socket.emit("send_message", { message: messg });
-  };
 
   // Post a new review
   const handleClick = () => {
@@ -55,11 +49,11 @@ const ProfilePage = () => {
       .then((res) => res.json())
       .then((data) => {
         setReview({});
-       setTrigger(!trigger);
+        setTrigger(!trigger);
       });
   };
- // Remove a review
-  const handleRemove = (ev,param) => {
+  // Remove a review
+  const handleRemove = (ev, param) => {
     console.log(param);
     console.log(review);
     fetch(`/deleteReview/${userId.id}`, {
@@ -76,7 +70,32 @@ const ProfilePage = () => {
         setTrigger(!trigger);
       });
   };
+  // Create Unique Id with Mentor's Email on Database
+  const handleStartConversation = () => {
+    console.log(el);
+   
+    // fetch(`/deleteReview/${userId.id}`, {
+    //   method: "DELETE",
+    //   body: JSON.stringify({
+    //     text: review,
+    //     id: param,
+    //   }),
+    //   headers: { "Content-Type": "application/json" },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setReview({});
+    //     setTrigger(!trigger);
+    //   });
+  };
 
+  // If No User signedIn -> redirect the User to LOGIN
+  const handleRedirectToLogin = () => {
+    if (!allRedFunc.userState.loadStatus) {
+      window.alert("You are not signed. Please SignIn to send a message")
+      nav("/LoginPage");
+    } return;
+  };
   //Redo fetch req in order to receive reviews upon POST one
   useEffect(() => {
     if (userId.id) {
@@ -198,11 +217,7 @@ const ProfilePage = () => {
                 >
                   {review}
                 </ReviewEntry>
-                <ReviewBtn
-                  onClick={handleClick}
-                  type="submit"
-                  value="Submit"
-                >
+                <ReviewBtn onClick={handleClick} type="submit" value="Submit">
                   <Comment
                     style={{
                       marginRight: "15px",
@@ -210,6 +225,25 @@ const ProfilePage = () => {
                   />
                   Leave a Comment{" "}
                 </ReviewBtn>
+                {allRedFunc.userState.loadStatus ? (
+                  <ReviewBtn onClick={handleStartConversation}>
+                    Start Conversation
+                    <QuestionAnswerOutlined
+                      style={{
+                        marginLeft: "25px",
+                      }}
+                    />
+                  </ReviewBtn>
+                ) : (
+                  <ReviewBtn onClick={handleRedirectToLogin}>
+                    Sign in to send a message.
+                    <QuestionAnswerOutlined
+                      style={{
+                        marginLeft: "25px",
+                      }}
+                    />
+                  </ReviewBtn>
+                )}
               </ReviewEntryWrap>
               <Reviews>
                 {el.reviews ? (
@@ -225,7 +259,7 @@ const ProfilePage = () => {
                         {review.time}
                         <RemoveCircleOutline
                           value={review.time}
-                          onClick={(ev)=>handleRemove(ev, review.time)}
+                          onClick={(ev) => handleRemove(ev, review.time)}
                           style={{
                             marginLeft: "15px",
                           }}
@@ -246,21 +280,36 @@ const ProfilePage = () => {
               </Reviews>
             </ReviewCont>
           </Review>
-          {/* <h1>message received: {messgRC}</h1>
-           
-            <input
-              onChange={(event) => {
-                setmessg(event.target.value);
-              }}
-              placeholder="Mesage..."
-            />
-            <button onClick={sendMessage}>send message</button> */}
         </Wrapper>
-      ) : null}
+      ) : (
+        <LoaderWrapper>
+          <Icon>
+            <FiLoader style={{ height: "90px", width: "90px" }} />
+          </Icon>
+        </LoaderWrapper>
+      )}
     </Container>
   );
 };
 
+const LoaderWrapper = styled.div`
+  height: 500px;
+  margin-top: 400px;
+`;
+
+const turning = keyframes`
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    `;
+
+const Icon = styled.div`
+  animation: ${turning} 1000ms infinite linear;
+`;
 const LIReview = styled.div`
   list-style: none;
   margin-top: 20px;

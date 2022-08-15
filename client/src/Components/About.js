@@ -8,7 +8,7 @@ const About = () => {
         <ImgBack src={aboutBackground}></ImgBack>
         <AboutParagCont>
           <AboutParag style={{ fontSize: "23px" }}>
-            <h1 style={{ color: "white" }}>Our Mission</h1>
+            <p style={{ color: "white" }}>Our Mission</p>
             This website aims to match mentors and students on variety of
             topics. Whenever the MENTOR have the special icon on his Card, it
             represents that the student will have the oppurtunity to have the
@@ -59,7 +59,7 @@ const AboutParagCont = styled.div`
   justify-content: center;
   flex-direction: column;
 `;
-const AboutParag = styled.p`
+const AboutParag = styled.div`
   color: white;
   width: 40vw;
 

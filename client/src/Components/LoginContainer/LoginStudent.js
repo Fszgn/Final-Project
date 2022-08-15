@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import SetCookie from "../Cookie/SetCookie";
-import GetCookie from "../Cookie/GetCookie";
-const LoginStudent = () => {
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+  
+const LoginStudent = ({ trigger, settrigger }) => {
   // Store the user information
   const [student, setStudent] = useState(null);
-
+  //navigator
+  const nav = useNavigate();
 
   // update state based on the token from OAuth
   const handleCallbackResponse = async (response) => {
     const userObj = await jwt_decode(response.credential);
     // console.log(userObj);
     await setStudent(userObj);
+    settrigger(!trigger);
+
     //setCookie -> id from OAuth
     SetCookie("userUId", userObj.sub);
   };
@@ -44,17 +49,57 @@ const LoginStudent = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          nav("/");
         });
     }
   }, [student]);
 
   return (
-    <div>
-      Student Login
-      <div id="signInDiv"></div>
-    </div>
+    <Wrapper>
+      <Container>
+        <Title>Login via Google</Title>
+        <div id="signInDiv"></div>
+        <form>
+          <input type="text"></input>
+        </form>
+      </Container>
+    </Wrapper>
   );
 };
+
+
+const Title = styled.h1`
+margin-bottom: 15px;
+`
+
+const Container = styled.div`
+  width: 50vw;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+  color: #016340;
+  background-color: rgba(66, 66, 66, 0.4);
+
+  border: 2px solid rgba(66, 66, 66, 0.2);
+
+  box-shadow: 0px 14px 32px -6px rgba(66, 66, 66, 0.8);
+
+  backdrop-filter: blur(5px);
+`;
+
+const Wrapper = styled.div`
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10%;
+`;
 
 export default LoginStudent;

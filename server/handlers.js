@@ -143,7 +143,11 @@ const studentLogedIn = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err.message);
+        return res.status(201).json({
+          status: 201,
+          body: "User already in the DataBase",
+          success: true,
+        });
   } finally {
     client.close();
   }
@@ -166,7 +170,11 @@ const mentorLogedIn = async (req, res) => {
       success: true,
     });
   } catch (err) {
-    console.log(err.message);
+        return res.status(200).json({
+          status: 201,
+          body: "user already registered",
+          success: true,
+        });
   } finally {
     client.close();
   }
@@ -202,15 +210,8 @@ const getTheUser = async (req, res) => {
 
 // receives Mentors data from DataBase
 const getTheMentors = async (req, res) => {
-  console.log(req.params)
   let cityName = req.params.city;
 
-  // if (req.params.city === "null") {
-  //   cityName = "Montreal";
-  //   console.log("cityName");
-  // }
-    console.log(cityName);
-  
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   try {
@@ -292,7 +293,7 @@ const findEachUser = async (req, res) => {
 const postReview = async (req, res) => {
   const uniqueId = req.params.id;
   const rev = req.body.text;
-  console.log(rev)
+  console.log(rev);
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   try {
@@ -317,7 +318,7 @@ const postReview = async (req, res) => {
 const deleteReview = async (req, res) => {
   const uniqueId = req.params.id;
   const revId = req.body.id;
-console.log(uniqueId,req.body)
+  console.log(uniqueId, req.body);
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   try {

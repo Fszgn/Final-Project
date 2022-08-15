@@ -1,14 +1,32 @@
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
+import SetCookie from "../Cookie/SetCookie";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { cityArray, profesMentor } from "../../BatchImport/data/data";
+import { Select } from "@mui/material";
+import { CleaningServices } from "@mui/icons-material";
 
-const LoginMentor = () => {
+const LoginMentor = ({ trigger, settrigger }) => {
+  //state for recording the City selection
+  const [city, setCity] = useState(null);
+  //state for recording the City selection
+  const [course, setCourse] = useState([]);
+  // Store the user information
   const [mentor, setMentor] = useState(null);
+  //state for recording the Count selection
+  const [counter, setCounter] = useState(0);
+
+
 
   // update state based on the token from OAuth
   const handleCallbackResponse = async (response) => {
     const userObj = await jwt_decode(response.credential);
     console.log(userObj);
     await setMentor(userObj);
+    settrigger(!trigger);
+    //setCookie -> id from OAuth
+    SetCookie("userUId", userObj.sub);
   };
 
   // GOOGLE ACCOUNT LOGIN API
@@ -27,30 +45,139 @@ const LoginMentor = () => {
     });
   }, []);
 
-  // calls endpoint for posting users data
-  useEffect(() => {
-    if (mentor !== null) {
-      console.log(mentor.email);
-      fetch(`/mentorLogIn`, {
-        method: "POST",
-        body: JSON.stringify({
-          mentor,
-        }),
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        });
+
+  //handle Course selection
+  const handleCourse = (ev) => {
+
+     if (ev.target.checked && counter === 3) {
+       ev.target.checked = false;
+       window.alert("You have reached the max number of selection.");
+     } else if (ev.target.checked && counter < 3) {
+       console.log("checked");
+       setCounter(counter + 1);
+       setCourse([...course, ev.target.value]);
+     } else if (!ev.target.checked) {
+       const name = ev.target.value;
+       console.log("UNchecked");
+       setCounter(counter - 1);
+       setCourse(course.filter((el) => el !== name));
     }
-  }, [mentor]);
+
+  };
 
   return (
-    <div>
-      Mentor Login
-      <div id="signInDiv"></div>
-    </div>
+    <Wrapper>
+      <Container>
+        <Title>Register with Google</Title>
+
+        <Form>
+          <Sect>
+            <h1 style={{ marginBottom: "20px" }}>
+              Select max 3
+            </h1>
+            {profesMentor.map((el) => {
+              return (
+                <SelectSec
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <label style={{ marginRight: "5px" }} for={el}>
+                    {el}
+                  </label>
+                  <input
+                    onClick={handleCourse}
+                    type="checkbox"
+                    id={el}
+                    name={el}
+                    value={el}
+                  ></input>
+                </SelectSec>
+              );
+            })}
+          </Sect>
+          <Sect>
+            <h1 style={{ marginBottom: "20px" }}>Select City</h1>
+            <select required
+              onChange={(ev) => {
+                setCity(ev.target.value);
+              }}
+            >
+              {cityArray.map((el, index) => {
+                return (
+                  <option key={index} value={el}>
+                    {" "}
+                    {el}
+                  </option>
+                );
+              })}
+            </select>
+          </Sect>
+        </Form>
+        <div
+          style={{ marginBottom: "30px", borderRadius: "25px" }}
+          id="signInDiv"
+        ></div>
+      </Container>
+    </Wrapper>
   );
 };
 
+const Sect = styled.div`
+  margin: 35px 10px 35px 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  border: 2px solid rgba(66, 66, 66, 0.2);
+  padding: 20px;
+`;
+
+const SelectSec = styled.div`
+  margin-top: 5px;
+  appearance: none;
+  padding: 0 1em 0 0;
+  font-family: inherit;
+  font-size: inherit;
+`;
+const Title = styled.h1`
+  margin-bottom: 15px;
+`;
+const Form = styled.form`
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+`;
+
+const Container = styled.div`
+  width: 50vw;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+  color: #016340;
+  background-color: rgba(66, 66, 66, 0.4);
+
+  border: 2px solid rgba(66, 66, 66, 0.2);
+
+  box-shadow: 0px 14px 32px -6px rgba(66, 66, 66, 0.8);
+
+  backdrop-filter: blur(5px);
+`;
+
+const Wrapper = styled.div`
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10%;
+`;
 export default LoginMentor;

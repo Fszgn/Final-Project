@@ -9,32 +9,58 @@ import LoginStudent from "./Components/LoginContainer/LoginStudent";
 import HomeFeed from "./Components/HomeFeed";
 import LoginContainer from "./Components/LoginContainer/LoginContainer";
 import LoginMentor from "./Components/LoginContainer/loginMentor";
-import { UsersDataContext } from "./Context/UsersContext";
+import { UsersDataContext } from "./Components/Context/UsersContext";
 import About from "./Components/About";
 import ProfilePage from "./Components/ProfilePage";
+import DirectMessage from "./Components/DirectMessage";
 
 const App = () => {
+  //state triggers fetches
+  const [trigger, settrigger] = useState(false);
 
-    CheckLoggedIn();
-
+  CheckLoggedIn({ trigger, settrigger });
 
   return (
     <Router>
       <GlobalStyles />
-      <>
-        <Header />
+      <Container>
+        <Header trigger={trigger} settrigger={settrigger} />
         <Routes>
-          <Route path="/fullProfile/:id" element={<ProfilePage />} />
-          <Route path="/" element={<HomeFeed />} />
-          <Route path="/LoginStudent" element={<LoginStudent />} />
-          <Route path="/LoginMentor" element={<LoginMentor />} />
-          <Route path="/LoginPage" element={<LoginContainer />} />
+          <Route
+            path="/fullProfile/:id"
+            element={<ProfilePage />}
+          />
+          <Route
+            path="/"
+            element={<HomeFeed trigger={trigger} settrigger={settrigger} />}
+          />
+          <Route
+            path="/LoginStudent"
+            element={<LoginStudent trigger={trigger} settrigger={settrigger} />}
+          />
+          <Route
+            path="/LoginMentor"
+            element={<LoginMentor trigger={trigger} settrigger={settrigger} />}
+          />
+          <Route
+            path="/LoginPage"
+            element={
+              <LoginContainer  />
+            }
+          />
           <Route path="/About" element={<About />} />
         </Routes>
-      </>
+        <DirectMessage />
+      </Container>
     </Router>
   );
 };
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
 
 export default App;

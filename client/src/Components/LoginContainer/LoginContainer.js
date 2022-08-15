@@ -6,35 +6,44 @@ const LoginContainer = () => {
 
   return (
     <Container>
-      <StudentButton to="/LoginStudent">Student</StudentButton>
-      <MentorButton to="/LoginMentor">Mentor</MentorButton>
+      <Btn to="/LoginStudent">Student</Btn>
+      <Btn to="/LoginMentor">Mentor</Btn>
     </Container>
   );
 };
 
-const StudentButton = styled(NavLink)`
-  margin-left: 40px;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-  :hover {
-    background-color: black;
-    color: var(--color-navbar-beige);
-  }
-`;
-const MentorButton = styled(NavLink)`
-  margin-left: 40px;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-  :hover {
-    background-color: black;
-    color: var(--color-navbar-beige);
-  }
-`;
 const Container = styled.div`
   width: 100vw;
   height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Btn = styled(NavLink)`
+  margin-bottom: 10px;
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+  color: #3b3b3b;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 60px;
+  margin-left: 25px;
+
+  outline: none;
+  padding: 12px 18px;
+  text-align: center;
+  text-decoration: none;
+  &:hover {
+    transition-property: all;
+    transition-duration: 300ms;
+    transform: translate(0, -2px);
+    background-color: #3b3b3b;
+    color: white;
+  }
 `;
 
 export default LoginContainer;

@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import About from "./About";
 import DetailedCard from "./DetailedCard";
 import Filter from "./Filter";
 import MentorCard from "./MentorCard";
+import { FiLoader } from "react-icons/fi";
 
-const HomeFeed = () => {
+const HomeFeed = ({ trigger , settrigger }) => {
   //index for rendering mentorList
   const [indexList, setIndexList] = useState(0);
 
-  //state triggers fetches
-  const [trigger, settrigger] = useState(false);
   //state saves user locations coordinates
   const [loc, setLoc] = useState(null);
   //state saves MenstorList
@@ -65,39 +64,31 @@ const HomeFeed = () => {
   }, []);
 
   //  REceive Mentors data from the server
-  useEffect( () => {
-//     if (searchCity.length < 1) {
-      
-//       console.log(typeof searchCity);
-//       await setSearchCity("Ottawa")
-
-// }
-  fetch(`/getTheMentors/${searchCity}`)
-    .then((res) => res.json())
-    .then( (data) => {
-      // FILTER by first name
-      const filterByName = data.body.filter((el) => {
-        return el.firstName.toLowerCase().includes(searchName);
-      });
-      return filterByName;
-    })
-    .then((data) => {
-      
-      console.log(data)
-      // FILTER by course name
-      console.log(typeof searchCity);
-      const filteredByCoursse = data.filter((el) => {
-        let nestedArry = el.mentroship.filter((course) => {
-          return course.toLowerCase() === searchCourse.toLowerCase();
+  useEffect(() => {
+    fetch(`/getTheMentors/${searchCity}`)
+      .then((res) => res.json())
+      .then((data) => {
+        // FILTER by first name
+        const filterByName = data.body.filter((el) => {
+          return el.firstName.toLowerCase().includes(searchName);
         });
-        return nestedArry.length > 0;
+        return filterByName;
+      })
+      .then((data) => {
+        // console.log(data)
+        // FILTER by course name
+        const filteredByCoursse = data.filter((el) => {
+          let nestedArry = el.mentroship.filter((course) => {
+            return course.toLowerCase() === searchCourse.toLowerCase();
+          });
+          return nestedArry.length > 0;
+        });
+        setmentorList(filteredByCoursse);
+        return filteredByCoursse;
+      })
+      .then((data) => {
+        // console.log(data);
       });
-      setmentorList(filteredByCoursse);
-      return filteredByCoursse;
-    })
-    .then((data) => {
-      console.log(data);
-    });
   }, [trigger]);
 
   return (
@@ -129,7 +120,11 @@ const HomeFeed = () => {
           );
         })
       ) : (
-        <p>loading</p>
+        <LoaderWrapper>
+          <Icon>
+            <FiLoader style={{ height: "90px", width: "90px" }} />
+          </Icon>
+        </LoaderWrapper>
       )}{" "}
       <NextPrev>
         <NextButton onClick={handlePrev}>Previous</NextButton>
@@ -138,8 +133,24 @@ const HomeFeed = () => {
     </Container>
   );
 };
-//===================================
-//      user.filter((el)=>{el.firstName.toLowerCase().includes("somet")}).map(el=>{return el.firstName})
+const LoaderWrapper = styled.div`
+  height: 500px;
+  margin-top: 400px;
+`;
+
+const turning = keyframes`
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    `;
+
+const Icon = styled.div`
+  animation: ${turning} 1000ms infinite linear;
+`;
 const NextButton = styled.button`
   margin-bottom: 10px;
   border: 2px solid #1a1a1a;
