@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import SetCookie from "../Cookie/SetCookie";
 import { useNavigate } from "react-router-dom";
@@ -6,27 +6,68 @@ import styled from "styled-components";
 import { cityArray, profesMentor } from "../../BatchImport/data/data";
 import { Select } from "@mui/material";
 import { CleaningServices } from "@mui/icons-material";
-
+import greenPic from "../../assets/green future.png";
+import { UsersDataContext } from "../Context/UsersContext";
 const LoginMentor = ({ trigger, settrigger }) => {
+  //user context
+  const allRedFunc = useContext(UsersDataContext);
   //state for recording the City selection
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState("Montreal");
   //state for recording the City selection
   const [course, setCourse] = useState([]);
   // Store the user information
-  const [mentor, setMentor] = useState(null);
+  const [mentor, setMentor] = useState({});
   //state for recording the Count selection
   const [counter, setCounter] = useState(0);
 
-
+  // GEt user Location NOT DONE ==========================
+  // useEffect(() => {
+  //   if (navigator?.geolocation) {
+  //     navigator.geolocation.getCurrentPosition((location) => {
+  //       if (location) {
+  //         setLoc(location.coords);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   // update state based on the token from OAuth
   const handleCallbackResponse = async (response) => {
-    const userObj = await jwt_decode(response.credential);
-    console.log(userObj);
-    await setMentor(userObj);
+    const Obj = await jwt_decode(response.credential);
+    setMentor({
+      ...mentor,
+      _id: Obj.sub,
+      email: Obj.email,
+      firstName: Obj.given_name,
+      lastName: Obj.family_name,
+      city: city,
+      country: "Canada",
+      picture: "../../assets/green future.png",
+      isGreen: true,
+      mentroship: [...course],
+    });
     settrigger(!trigger);
     //setCookie -> id from OAuth
-    SetCookie("userUId", userObj.sub);
+    SetCookie("userUId", Obj.sub);
+    if (course.length > 0) {
+    }
+  };
+
+  const logInMentor = () => {
+    settrigger(!trigger);
+
+    fetch(`/mentorLogIn`, {
+      method: "POST",
+      body: JSON.stringify({
+        mentor,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        allRedFunc.LogMentorIn(mentor);
+        console.log(mentor)
+      });
   };
 
   // GOOGLE ACCOUNT LOGIN API
@@ -45,36 +86,30 @@ const LoginMentor = ({ trigger, settrigger }) => {
     });
   }, []);
 
-
   //handle Course selection
   const handleCourse = (ev) => {
-
-     if (ev.target.checked && counter === 3) {
-       ev.target.checked = false;
-       window.alert("You have reached the max number of selection.");
-     } else if (ev.target.checked && counter < 3) {
-       console.log("checked");
-       setCounter(counter + 1);
-       setCourse([...course, ev.target.value]);
-     } else if (!ev.target.checked) {
-       const name = ev.target.value;
-       console.log("UNchecked");
-       setCounter(counter - 1);
-       setCourse(course.filter((el) => el !== name));
+    if (ev.target.checked && counter === 3) {
+      ev.target.checked = false;
+      window.alert("You have reached the max number of selection.");
+    } else if (ev.target.checked && counter < 3) {
+      console.log("checked");
+      setCounter(counter + 1);
+      setCourse([...course, ev.target.value]);
+    } else if (!ev.target.checked) {
+      const name = ev.target.value;
+      console.log("UNchecked");
+      setCounter(counter - 1);
+      setCourse(course.filter((el) => el !== name));
     }
-
   };
 
   return (
     <Wrapper>
       <Container>
-        <Title>Register with Google</Title>
-
+        <Title>Login with Google</Title>
         <Form>
           <Sect>
-            <h1 style={{ marginBottom: "20px" }}>
-              Select max 3
-            </h1>
+            <h1 style={{ marginBottom: "20px" }}>Select max 3</h1>
             {profesMentor.map((el) => {
               return (
                 <SelectSec
@@ -100,7 +135,8 @@ const LoginMentor = ({ trigger, settrigger }) => {
           </Sect>
           <Sect>
             <h1 style={{ marginBottom: "20px" }}>Select City</h1>
-            <select required
+            <select
+              required
               onChange={(ev) => {
                 setCity(ev.target.value);
               }}
@@ -119,7 +155,8 @@ const LoginMentor = ({ trigger, settrigger }) => {
         <div
           style={{ marginBottom: "30px", borderRadius: "25px" }}
           id="signInDiv"
-        ></div>
+        ></div>{" "}
+        <button onClick={logInMentor}>triigg</button>
       </Container>
     </Wrapper>
   );

@@ -23,7 +23,7 @@ const HomeFeed = ({ trigger , settrigger }) => {
   //state search by City
   const [searchCity, setSearchCity] = useState(null);
   //state search by Course
-  const [searchCourse, setSearchCourse] = useState("Music");
+  const [searchCourse, setSearchCourse] = useState();
 
   //
 
@@ -32,10 +32,10 @@ const HomeFeed = ({ trigger , settrigger }) => {
     if (mentorList !== null) {
       if (indexList + 10 >= mentorList.length) {
         setIndexList(mentorList.length - 10);
-        settrigger(!trigger);
+
         return;
       }
-      settrigger(!trigger);
+
       setIndexList(indexList + 10);
     }
   };
@@ -45,10 +45,8 @@ const HomeFeed = ({ trigger , settrigger }) => {
     if (mentorList !== null) {
       if (indexList - 10 < 0) {
         setIndexList(0);
-        settrigger(!trigger);
         return;
       }
-      settrigger(!trigger);
       setIndexList(indexList - 10);
     }
   };
@@ -75,7 +73,9 @@ const HomeFeed = ({ trigger , settrigger }) => {
         return filterByName;
       })
       .then((data) => {
-        // console.log(data)
+        if (searchCourse === undefined) {
+          return setmentorList(data);;
+        }
         // FILTER by course name
         const filteredByCoursse = data.filter((el) => {
           let nestedArry = el.mentroship.filter((course) => {
@@ -85,9 +85,6 @@ const HomeFeed = ({ trigger , settrigger }) => {
         });
         setmentorList(filteredByCoursse);
         return filteredByCoursse;
-      })
-      .then((data) => {
-        // console.log(data);
       });
   }, [trigger]);
 

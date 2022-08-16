@@ -154,13 +154,15 @@ const studentLogedIn = async (req, res) => {
 };
 // Insert logedin Mentor information into Mongodb
 const mentorLogedIn = async (req, res) => {
+
+  const Obj = req.body.mentor;
+  console.log(Obj);
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   try {
     const db = client.db("finalpro");
     const insertMentor = await db.collection("mentors").insertOne({
-      _id: req.body.mentor.sub,
-      mentorEmail: req.body.mentor.email,
+      ...Obj,
     });
     console.log(insertMentor);
 
@@ -338,6 +340,62 @@ const deleteReview = async (req, res) => {
     client.close();
   }
 };
+const startConversation = async (req, res) => {
+  // console.log(req.body);
+  // console.log(req.params);
+
+  const type = req.params.type;
+  const body = req.body;
+
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const db = client.db("finalpro");
+
+    const initiate = await db.collection("students").updateOne(
+      { _id: body.from.signedStudent._id },
+      {
+        $push: {
+          messageBox: [
+            {
+              email: body.to.email,
+              messages: [
+                { text: "hellooo", time: "2022-04-04/14:43" },
+                { text: "my name is New MEssage", time: "2022-04-04/16:43" },
+              ],
+            },
+          ],
+        },
+      }
+    );
+
+    console.log(initiate)
+
+    return res.status(200).json({
+      status: 200,
+      body: initiate,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    client.close();
+  }
+
+  // console.log(req.body);
+  // console.log(req.params);
+  // return res.status(200).json({
+  //   status: 200,
+  //   body: "saved",
+  //   success: true,
+  // });
+};
+
+
+
+
+
+
 module.exports = {
   studentLogedIn,
   mentorLogedIn,
@@ -348,4 +406,5 @@ module.exports = {
   findEachUser,
   postReview,
   deleteReview,
+  startConversation,
 };

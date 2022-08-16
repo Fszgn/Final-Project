@@ -8,6 +8,7 @@ const initialState = {
   signedStudent: null,
   loadStatus: false,
   direcMessageContainer: false,
+  direcMessageTo:null,
 };
 
 // Switch Cases
@@ -37,6 +38,11 @@ const reducer = (state, action) => {
         ...state,
         direcMessageContainer: false,
       };
+    case "direct-message-Info":
+      return {
+        ...state,
+        direcMessageTo: action.data.el,
+      };
     case "logout-user":
       return {
         ...state,
@@ -52,13 +58,16 @@ const reducer = (state, action) => {
 export const UserDataProvider = ({ children }) => {
    const [userState, dispatchEvent] = useReducer(reducer, initialState);
 
-    const LogStudentIn = (data) => {
+  const LogStudentIn = (data) => {
+          console.log(data);
+
         dispatchEvent({
           type: "login-Student-data",
           data,
         });
   }
   const LogMentorIn = (data) => {
+    console.log(data)
         dispatchEvent({
           type: "login-Mentor-data",
           data,
@@ -81,7 +90,12 @@ export const UserDataProvider = ({ children }) => {
         type: "direct-message-close",
       });
   };
-  
+   const directTo = (data) => {
+      dispatchEvent({
+        type: "direct-message-Info",
+        data,
+      });
+  };
   
   
   
@@ -97,6 +111,7 @@ export const UserDataProvider = ({ children }) => {
         LogUserOut,
         directMessageOpen,
         directMessageClose,
+        directTo,
       }}
     >
       {children}

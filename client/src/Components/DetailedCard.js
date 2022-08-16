@@ -24,7 +24,6 @@ const DetailedCard = ({ setshowDetailedCard, user }) => {
   const handleClick = () => {
     setshowDetailedCard(false);
   };
-  console.log(user);
   return (
     <Container>
       {user && (

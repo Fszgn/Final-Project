@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import jwt_decode from "jwt-decode";
 import SetCookie from "../Cookie/SetCookie";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-  
+  import { UsersDataContext } from "../Context/UsersContext";
 const LoginStudent = ({ trigger, settrigger }) => {
+  //user context
+  const allRedFunc = useContext(UsersDataContext);
   // Store the user information
   const [student, setStudent] = useState(null);
   //navigator
@@ -49,6 +51,8 @@ const LoginStudent = ({ trigger, settrigger }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          allRedFunc.LogMentorIn(student);
+          console.log(student);
           nav("/");
         });
     }
@@ -59,9 +63,7 @@ const LoginStudent = ({ trigger, settrigger }) => {
       <Container>
         <Title>Login via Google</Title>
         <div id="signInDiv"></div>
-        <form>
-          <input type="text"></input>
-        </form>
+        <form></form>
       </Container>
     </Wrapper>
   );

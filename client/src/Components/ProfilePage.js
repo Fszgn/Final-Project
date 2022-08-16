@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import greenPic from "../assets/green future.png";
+import checkType from "./Hooks/checkType";
 import { FiLoader } from "react-icons/fi";
 import {
   LocationOn,
@@ -17,10 +18,8 @@ import {
   Comment,
   RemoveCircleOutline,
   QuestionAnswerOutlined,
+  SignLanguageOutlined,
 } from "@mui/icons-material";
-import { io } from "socket.io-client";
-
-const socket = io.connect("http://localhost:8001");
 
 const ProfilePage = () => {
   const nav = useNavigate();
@@ -72,30 +71,29 @@ const ProfilePage = () => {
   };
   // Create Unique Id with Mentor's Email on Database
   const handleStartConversation = () => {
-    console.log(el);
-   
-    // fetch(`/deleteReview/${userId.id}`, {
-    //   method: "DELETE",
+    allRedFunc.directTo({el});
+    const type = checkType(allRedFunc.userState);
+    // fetch(`/StartConversation/${type}`, {
+    //   method: "POST",
     //   body: JSON.stringify({
-    //     text: review,
-    //     id: param,
+    //     type: type,
+    //     to: el,
+    //     from: allRedFunc.userState,
     //   }),
     //   headers: { "Content-Type": "application/json" },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setReview({});
-    //     setTrigger(!trigger);
-    //   });
+    // });
+    console.log(allRedFunc.userState);
   };
 
   // If No User signedIn -> redirect the User to LOGIN
   const handleRedirectToLogin = () => {
     if (!allRedFunc.userState.loadStatus) {
-      window.alert("You are not signed. Please SignIn to send a message")
+      window.alert("You are not signed. Please SignIn to send a message");
       nav("/LoginPage");
-    } return;
+    }
+    return;
   };
+
   //Redo fetch req in order to receive reviews upon POST one
   useEffect(() => {
     if (userId.id) {
@@ -104,7 +102,7 @@ const ProfilePage = () => {
         .then((res) => res.json())
         .then((data) => {
           setEl(data.body);
-          console.log(data.body);
+          console.log(data.body)
         });
     }
   }, [review, trigger]);
@@ -227,12 +225,12 @@ const ProfilePage = () => {
                 </ReviewBtn>
                 {allRedFunc.userState.loadStatus ? (
                   <ReviewBtn onClick={handleStartConversation}>
-                    Start Conversation
-                    <QuestionAnswerOutlined
+                    <SignLanguageOutlined
                       style={{
-                        marginLeft: "25px",
+                        marginRight: "25px",
                       }}
                     />
+                    Say Hello!
                   </ReviewBtn>
                 ) : (
                   <ReviewBtn onClick={handleRedirectToLogin}>

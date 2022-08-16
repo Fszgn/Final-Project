@@ -32,13 +32,32 @@ const DirectMessage = () => {
       setmessgRC(data.message);
     });
   }, [socket]);
+
+  //SOCKET.IO CONNECTION
   socket.on("connection", () => {
     console.log("first");
   });
 
   //SOCKET.IO SEND MESSAGE
   const sendMessage = (data) => {
-    socket.emit("send_message", { message: messg });
+    socket.emit(
+      "send_message",
+      allRedFunc.userState.signedStudent!==null
+        ? ({
+            body: {
+              text: messg,
+              to: allRedFunc.userState.direcMessageTo,
+              from: allRedFunc.userState.signedStudent,
+            },
+          })
+        :( {
+            body: {
+              text: messg,
+              to: allRedFunc.userState.direcMessageTo,
+              from: allRedFunc.userState.signedMentor,
+            },
+          })
+    );
   };
 
   return (

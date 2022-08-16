@@ -15,12 +15,12 @@ const CheckLoggedIn = ({ trigger, settrigger }) => {
       fetch(`/getTheUser`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("check lgin triggered");
-          if (data.body.student !== null) {
-            allRedFunc.LogStudentIn(data.body.student);
-          } else if (data.body.mentor !== null) {
-            allRedFunc.LogMentorIn(data.body.mentor);
-          }
+          console.log(data);
+        if (data.body.student !== null) {
+          allRedFunc.LogStudentIn(data.body.student);
+        } else if (data.body.mentor !== null) {
+          allRedFunc.LogMentorIn(data.body.mentor);
+        }
         });
       return;
     } else if (cookie === undefined) {

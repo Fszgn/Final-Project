@@ -22,7 +22,6 @@ const MentorCard = ({
     fetch(`/findEachUser/${el._id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setdetailedUser(data.body);
         setshowDetailedCard(true);
       });
