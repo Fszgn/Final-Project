@@ -84,7 +84,6 @@ const DirectMessage = () => {
                 <Close style={{ marginRight: " 15px" }} />
               </CloseBtn>
               <InputBox>
-                {/* <MessageBox>{messgReceived.messages?.map(el=>{return <Bubble>{el.text}</Bubble>;})}</MessageBox> */}
                 <MessageBox>
                   {messgBuble?.map((el) => {
                     return <Bubble>{el.text}</Bubble>;
@@ -131,7 +130,7 @@ const Bubble = styled.div`
   background-color: white;
   border-radius: 10px 10px 0 10px;
   margin: 5px;
-  padding: 3px;
+  padding: 7px;
 `;
 const ButtonContainer = styled.div`
   width: 100%;

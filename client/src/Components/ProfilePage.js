@@ -246,22 +246,26 @@ const ProfilePage = () => {
                 {el.reviews ? (
                   el.reviews.map((review) => {
                     return (
-                      <LIReview>
-                        <SignalCellular4Bar
-                          style={{
-                            marginRight: "15px",
-                          }}
-                        />
-                        {review.text}
-                      
-                        <RemoveCircleOutline
-                          value={review.time}
-                          onClick={(ev) => handleRemove(ev, review.time)}
-                          style={{
-                            marginLeft: "15px",
-                          }}
-                        />
-                      </LIReview>
+                      <>
+                        {review ? (
+                          <LIReview>
+                            <SignalCellular4Bar
+                              style={{
+                                marginRight: "15px",
+                              }}
+                            />
+                            {review.text}
+
+                            <RemoveCircleOutline
+                              value={review.time}
+                              onClick={(ev) => handleRemove(ev, review.time)}
+                              style={{
+                                marginLeft: "15px",
+                              }}
+                            />
+                          </LIReview>
+                        ) : null}
+                      </>
                     );
                   })
                 ) : (
