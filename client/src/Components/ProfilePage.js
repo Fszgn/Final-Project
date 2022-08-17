@@ -71,18 +71,18 @@ const ProfilePage = () => {
   };
   // Create Unique Id with Mentor's Email on Database
   const handleStartConversation = () => {
-    allRedFunc.directTo({el});
-    const type = checkType(allRedFunc.userState);
-    // fetch(`/StartConversation/${type}`, {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     type: type,
-    //     to: el,
-    //     from: allRedFunc.userState,
-    //   }),
-    //   headers: { "Content-Type": "application/json" },
-    // });
-    console.log(allRedFunc.userState);
+    allRedFunc.directMessageOpen();
+    allRedFunc.directTo({ el });
+    fetch(`/startConversation`, {
+      method: "POST",
+      body: JSON.stringify({
+        text: "I'd like to connect",
+        time: new Date().getTime(),
+        to: el,
+        from: allRedFunc.userState,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
   };
 
   // If No User signedIn -> redirect the User to LOGIN

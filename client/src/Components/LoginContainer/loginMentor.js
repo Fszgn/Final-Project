@@ -53,6 +53,7 @@ const LoginMentor = ({ trigger, settrigger }) => {
     }
   };
 
+  //login As a Mentor
   const logInMentor = () => {
     settrigger(!trigger);
 

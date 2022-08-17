@@ -16,7 +16,11 @@ const CheckLoggedIn = ({ trigger, settrigger }) => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-        if (data.body.student !== null) {
+          if (data.body.student && data.body.mentor) {
+            allRedFunc.LogMentorIn(data.body.mentor);
+            return;
+          }
+        else if (data.body.student !== null) {
           allRedFunc.LogStudentIn(data.body.student);
         } else if (data.body.mentor !== null) {
           allRedFunc.LogMentorIn(data.body.mentor);

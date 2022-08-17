@@ -143,18 +143,17 @@ const studentLogedIn = async (req, res) => {
       success: true,
     });
   } catch (err) {
-        return res.status(201).json({
-          status: 201,
-          body: "User already in the DataBase",
-          success: true,
-        });
+    return res.status(201).json({
+      status: 201,
+      body: "User already in the DataBase",
+      success: true,
+    });
   } finally {
     client.close();
   }
 };
 // Insert logedin Mentor information into Mongodb
 const mentorLogedIn = async (req, res) => {
-
   const Obj = req.body.mentor;
   console.log(Obj);
   const client = new MongoClient(MONGO_URI, options);
@@ -172,11 +171,11 @@ const mentorLogedIn = async (req, res) => {
       success: true,
     });
   } catch (err) {
-        return res.status(200).json({
-          status: 201,
-          body: "user already registered",
-          success: true,
-        });
+    return res.status(200).json({
+      status: 201,
+      body: "user already registered",
+      success: true,
+    });
   } finally {
     client.close();
   }
@@ -340,59 +339,81 @@ const deleteReview = async (req, res) => {
     client.close();
   }
 };
-const startConversation = async (req, res) => {
-  // console.log(req.body);
-  // console.log(req.params);
-
-  const type = req.params.type;
-  const body = req.body;
-
+// Add new message to receivers database
+const addNewMessage = async (req) => {
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   try {
     const db = client.db("finalpro");
 
-    const initiate = await db.collection("students").updateOne(
-      { _id: body.from.signedStudent._id },
+    const databaseMessages = await db.collection("chats").updateOne(
+      {
+        _id: req.body.from.studentEmail,
+      },
       {
         $push: {
-          messageBox: [
-            {
-              email: body.to.email,
-              messages: [
-                { text: "hellooo", time: "2022-04-04/14:43" },
-                { text: "my name is New MEssage", time: "2022-04-04/16:43" },
-              ],
-            },
-          ],
+          messages: {
+            text: req.body.text,
+            time: req.body.time,
+            senderEmail: req.body.from.studentEmail,
+            receiverEmail: req.body.to.email,
+          },
         },
       }
     );
 
-    console.log(initiate)
-
-    return res.status(200).json({
-      status: 200,
-      body: initiate,
-      success: true,
-    });
+    console.log(databaseMessages);
   } catch (err) {
     console.log(err.message);
   } finally {
     client.close();
   }
+};
+// Start new conversation
+const startConversation = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const db = client.db("finalpro");
 
-  // console.log(req.body);
-  // console.log(req.params);
-  // return res.status(200).json({
-  //   status: 200,
-  //   body: "saved",
-  //   success: true,
-  // });
+    const databaseMessages = await db.collection("chats").insertOne({
+      _id: req.body.from.signedStudent.studentEmail,
+      messages: [
+        {
+          text: req.body.text,
+          time: req.body.time,
+          senderEmail: req.body.from.signedStudent.studentEmail,
+          receiverEmail: req.body.to.email,
+        },
+      ],
+    });
+
+  } catch (err) {
+    return "already exist" 
+  } finally {
+    client.close();
+  }
 };
 
 
+// Receive conversation
+const receiveMessages = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const db = client.db("finalpro");
 
+    const databaseMessages = await db.collection("chats").findOne({
+      _id: "furkan.sezgin566@gmail.com",
+    });
+
+    return databaseMessages;
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    client.close();
+  }
+};
 
 
 
@@ -407,4 +428,6 @@ module.exports = {
   postReview,
   deleteReview,
   startConversation,
+  addNewMessage,
+  receiveMessages,
 };
