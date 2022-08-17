@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import greenPic from "../assets/green future.png";
-import checkType from "./Hooks/checkType";
 import { FiLoader } from "react-icons/fi";
 import {
   LocationOn,
@@ -254,7 +253,7 @@ const ProfilePage = () => {
                           }}
                         />
                         {review.text}
-                        {review.time}
+                      
                         <RemoveCircleOutline
                           value={review.time}
                           onClick={(ev) => handleRemove(ev, review.time)}
@@ -319,6 +318,7 @@ const LIReview = styled.div`
   border: 2px solid #1a1a1a;
   background-color: transparent;
   border-radius: 15px;
+  min-height: 40px;
 
   padding: 10px;
 `;

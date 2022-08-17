@@ -10,9 +10,7 @@ const Filter = ({
   settrigger,
   trigger,
 }) => {
-  //   const handleChange = (event) => {
 
-  //   };
 
   return (
     <Wrapper>

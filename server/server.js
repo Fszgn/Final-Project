@@ -23,26 +23,24 @@ const options = {
     methods: ["GET", "POST"],
   },
 };
-
 const io = require("socket.io")(httpServer, options);
 
-io.on("connection",async (socket) => {
+//Handle SOCKET.IO
+io.on("connection", async (socket) => {
   /* ... */
-const msgArray = await receiveMessages();
-    io.emit("receive_message", msgArray);
+  const msgArray = await receiveMessages();
+  io.emit("receive_message", msgArray);
 
   socket.on("send_message", async (data) => {
     await addNewMessage(data);
     const msgArray = await receiveMessages(data);
     io.emit("receive_message", msgArray);
   });
-
 });
-
+// SOCKET.IO SERVER
 httpServer.listen(8001);
 
-
-
+//SERVER PORT
 const PORT = 8000;
 
 express()

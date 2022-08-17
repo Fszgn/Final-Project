@@ -1,9 +1,10 @@
-import { useEffect, useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import SetCookie from "../Cookie/SetCookie";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-  import { UsersDataContext } from "../Context/UsersContext";
+import { UsersDataContext } from "../Context/UsersContext";
+
 const LoginStudent = ({ trigger, settrigger }) => {
   //user context
   const allRedFunc = useContext(UsersDataContext);
@@ -15,8 +16,8 @@ const LoginStudent = ({ trigger, settrigger }) => {
   // update state based on the token from OAuth
   const handleCallbackResponse = async (response) => {
     const userObj = await jwt_decode(response.credential);
-    // console.log(userObj);
-    await setStudent(userObj);
+    // Save in State the user info from OAUTH
+    setStudent(userObj);
     settrigger(!trigger);
 
     //setCookie -> id from OAuth
@@ -38,7 +39,7 @@ const LoginStudent = ({ trigger, settrigger }) => {
     });
   }, []);
 
-  // calls endpoint for posting users data
+  // Post users data in Mongodb
   useEffect(() => {
     if (student !== null) {
       console.log(student.email);
@@ -69,10 +70,9 @@ const LoginStudent = ({ trigger, settrigger }) => {
   );
 };
 
-
 const Title = styled.h1`
-margin-bottom: 15px;
-`
+  margin-bottom: 15px;
+`;
 
 const Container = styled.div`
   width: 50vw;

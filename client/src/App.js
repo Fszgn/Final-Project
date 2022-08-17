@@ -17,7 +17,7 @@ import DirectMessage from "./Components/DirectMessage";
 const App = () => {
   //state triggers fetches
   const [trigger, settrigger] = useState(false);
-
+// Checks if a cookie exist if so logs the user in
   CheckLoggedIn({ trigger, settrigger });
 
   return (

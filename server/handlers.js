@@ -125,7 +125,7 @@ const userGen = (req, res) => {
       });
     });
 };
-// Insert logedin Students information into Mongodb
+// Insert logedIn Students Data in Mongodb
 const studentLogedIn = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
@@ -152,7 +152,7 @@ const studentLogedIn = async (req, res) => {
     client.close();
   }
 };
-// Insert logedin Mentor information into Mongodb
+// Insert logedIn Mentor data in Mongodb
 const mentorLogedIn = async (req, res) => {
   const Obj = req.body.mentor;
   console.log(Obj);
@@ -194,8 +194,6 @@ const getTheUser = async (req, res) => {
     const getTheUserMnt = await db.collection("mentors").findOne({
       _id: req.cookies.userUId,
     });
-
-    // console.log(getTheUser, "mntr->", getTheUserMnt);
 
     return res.status(200).json({
       status: 200,
@@ -251,7 +249,7 @@ const getTheMentors = async (req, res) => {
   }
 };
 
-// return the user's address info based on coordinates  !!!####!!!!!-------->>>>>>>
+// return the user's address info based on coordinates
 const fetchCity = async (req, res) => {
   var options = {
     provider: "google",

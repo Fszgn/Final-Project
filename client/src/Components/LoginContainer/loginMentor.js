@@ -1,13 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import jwt_decode from "jwt-decode";
 import SetCookie from "../Cookie/SetCookie";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { cityArray, profesMentor } from "../../BatchImport/data/data";
-import { Select } from "@mui/material";
-import { CleaningServices } from "@mui/icons-material";
-import greenPic from "../../assets/green future.png";
 import { UsersDataContext } from "../Context/UsersContext";
+
 const LoginMentor = ({ trigger, settrigger }) => {
   //user context
   const allRedFunc = useContext(UsersDataContext);
@@ -20,17 +18,6 @@ const LoginMentor = ({ trigger, settrigger }) => {
   //state for recording the Count selection
   const [counter, setCounter] = useState(0);
 
-  // GEt user Location NOT DONE ==========================
-  // useEffect(() => {
-  //   if (navigator?.geolocation) {
-  //     navigator.geolocation.getCurrentPosition((location) => {
-  //       if (location) {
-  //         setLoc(location.coords);
-  //       }
-  //     });
-  //   }
-  // }, []);
-
   // update state based on the token from OAuth
   const handleCallbackResponse = async (response) => {
     const Obj = await jwt_decode(response.credential);
@@ -42,7 +29,8 @@ const LoginMentor = ({ trigger, settrigger }) => {
       lastName: Obj.family_name,
       city: city,
       country: "Canada",
-      picture: "../../assets/green future.png",
+      picture:
+        "https://i.pinimg.com/564x/11/9b/82/119b822c24bfddfaab7ee792ba575413--minions-love-minions-minions.jpg",
       isGreen: true,
       mentroship: [...course],
     });
@@ -67,7 +55,7 @@ const LoginMentor = ({ trigger, settrigger }) => {
       .then((res) => res.json())
       .then((data) => {
         allRedFunc.LogMentorIn(mentor);
-        console.log(mentor)
+        console.log(mentor);
       });
   };
 
@@ -157,12 +145,38 @@ const LoginMentor = ({ trigger, settrigger }) => {
           style={{ marginBottom: "30px", borderRadius: "25px" }}
           id="signInDiv"
         ></div>{" "}
-        <button onClick={logInMentor}>triigg</button>
+        <Btn to="/" onClick={logInMentor}>
+          Submit
+        </Btn>
       </Container>
     </Wrapper>
   );
 };
+const Btn = styled(NavLink)`
+  margin-bottom: 10px;
+  border: 2px solid #1a1a1a;
+  background-color: transparent;
+  border-radius: 15px;
+  color: #3b3b3b;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 60px;
+  margin-left: 25px;
 
+  outline: none;
+  padding: 12px 18px;
+  text-align: center;
+  text-decoration: none;
+  &:hover {
+    transition-property: all;
+    transition-duration: 300ms;
+    transform: translate(0, -2px);
+    background-color: #3b3b3b;
+    color: white;
+  }
+`;
 const Sect = styled.div`
   margin: 35px 10px 35px 10px;
   display: flex;

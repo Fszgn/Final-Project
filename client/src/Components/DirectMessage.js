@@ -205,16 +205,6 @@ const MessageContainer = styled.div`
   box-shadow: 0px 14px 32px -6px rgba(66, 66, 66, 0.8);
   backdrop-filter: blur(5px);
 `;
-//   const DirectMessageContainer = styled.div`
-//   background-color: transparent;
-//   display: flex;
-//   align-items: flex-end;
-//   justify-content: flex-end;
-//   flex-direction: row;
 
-//   pointer-events: none;
-
-//   margin-right: 130px;
-//  `;
 
 export default DirectMessage;

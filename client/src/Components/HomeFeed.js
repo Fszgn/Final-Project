@@ -6,10 +6,10 @@ import Filter from "./Filter";
 import MentorCard from "./MentorCard";
 import { FiLoader } from "react-icons/fi";
 
-const HomeFeed = ({ trigger , settrigger }) => {
+const HomeFeed = ({ trigger, settrigger }) => {
+  
   //index for rendering mentorList
   const [indexList, setIndexList] = useState(0);
-
   //state saves user locations coordinates
   const [loc, setLoc] = useState(null);
   //state saves MenstorList
@@ -25,17 +25,14 @@ const HomeFeed = ({ trigger , settrigger }) => {
   //state search by Course
   const [searchCourse, setSearchCourse] = useState();
 
-  //
 
   // MOdifies index to Show next 10 item
   const handleNext = () => {
     if (mentorList !== null) {
       if (indexList + 10 >= mentorList.length) {
         setIndexList(mentorList.length - 10);
-
         return;
       }
-
       setIndexList(indexList + 10);
     }
   };

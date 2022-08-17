@@ -7,20 +7,17 @@ import {
   Badge,
   CoPresent,Twitter, LinkedIn, Facebook, KeyboardDoubleArrowRight,
 } from "@mui/icons-material";
-
-
 import { useNavigate } from "react-router-dom";
 
-
 const DetailedCard = ({ setshowDetailedCard, user }) => {
-
+// Navigator
     const nav = useNavigate();
-    
+    // Redirect the user to the Mentor's Full Page (ProfilePage)
     const handleProfile = () => {
             nav(`/fullProfile/${user._id}`);
     };
 
-
+//Close the Pop-up
   const handleClick = () => {
     setshowDetailedCard(false);
   };

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import greenPic from "../assets/green future.png";
 import {
@@ -11,12 +9,11 @@ import {
 
 const MentorCard = ({
   el,
-  detailedUser,
   setdetailedUser,
   setshowDetailedCard,
 }) => {
-
-
+  
+  // Shows Pop-up Page with user detail on
   const handleClick = (event) => {
     event.preventDefault();
     fetch(`/findEachUser/${el._id}`)
