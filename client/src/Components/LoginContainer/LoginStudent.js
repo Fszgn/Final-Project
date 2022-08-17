@@ -42,7 +42,7 @@ const LoginStudent = ({ trigger, settrigger }) => {
   // Post users data in Mongodb
   useEffect(() => {
     if (student !== null) {
-      console.log(student.email);
+      // console.log(student.email);
       fetch(`/studentLogIn`, {
         method: "POST",
         body: JSON.stringify({
@@ -53,7 +53,7 @@ const LoginStudent = ({ trigger, settrigger }) => {
         .then((res) => res.json())
         .then((data) => {
           allRedFunc.LogMentorIn(student);
-          console.log(student);
+          // console.log(student);
           nav("/");
         });
     }

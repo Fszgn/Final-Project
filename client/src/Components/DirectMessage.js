@@ -4,43 +4,49 @@ import { useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Close, CommentOutlined } from "@mui/icons-material";
 
-
 const socket = io.connect("http://localhost:8001");
 
 const DirectMessage = () => {
-  
   //User's Context
   const allRedFunc = useContext(UsersDataContext);
 
   // Received socket messages
   const [messgReceived, setMessgReceived] = useState([]);
+  // Received socket messages
+  const [messgObj, setMessgObj] = useState(null);
   // Set socket inpt message to be sent
   const [messg, setmessg] = useState("");
+  // Set socket inpt message to be sent
+  const [messgBuble, setmessgBuble] = useState([]);
 
   //Open Message Box
   const handleDMopen = () => {
-    console.log("dm opened");
     allRedFunc.directMessageOpen();
   };
   //Close Message Box
   const handleDMclose = () => {
-    console.log("dm closed");
     allRedFunc.directMessageClose();
   };
- 
+
   // SOCKET.IO RECEIVE MESSAGE
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data);
       setMessgReceived(data);
-      // console.log(messgReceived);
+
+      let Obj = {};
+      data.messages.forEach((el) => {
+        Obj[el.receiverEmail] = [];
+      });
+      data.messages.forEach((el) => {
+        Obj[el.receiverEmail].push({ text: el.text, time: el.time });
+      });
+      setMessgObj(Obj);
     });
   }, [socket]);
 
-
   //SOCKET.IO CONNECTION
   socket.on("connection", () => {
-    console.log("first");
+    // console.log("first");
   });
 
   //SOCKET.IO SEND MESSAGE
@@ -78,15 +84,34 @@ const DirectMessage = () => {
                 <Close style={{ marginRight: " 15px" }} />
               </CloseBtn>
               <InputBox>
-                <MessageBox>{messgReceived.messages?.map(el=>{return <Bubble>{el.text}</Bubble>;})}</MessageBox>
+                {/* <MessageBox>{messgReceived.messages?.map(el=>{return <Bubble>{el.text}</Bubble>;})}</MessageBox> */}
+                <MessageBox>
+                  {messgBuble?.map((el) => {
+                    return <Bubble>{el.text}</Bubble>;
+                  })}
+                  {messgObj ? (
+                    Object.keys(messgObj).map((el) => {
+                      return (
+                        <button
+                          onClick={(e) => {
+                            setmessgBuble([...messgObj[el]]);
+                          }}
+                        >
+                          {el}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <p>not loaded</p>
+                  )}
+                </MessageBox>
                 <ButtonContainer>
                   <ReviewEntry
                     onChange={(event) => {
                       setmessg(event.target.value);
-                     
                     }}
                     placeholder="Message..."
-                 />
+                  />
                   <ReviewBtn onClick={sendMessage}>send message</ReviewBtn>
                 </ButtonContainer>
               </InputBox>
@@ -102,10 +127,9 @@ const DirectMessage = () => {
   );
 };
 
-
 const Bubble = styled.div`
   background-color: white;
- border-radius: 10px 10px 0  10px;
+  border-radius: 10px 10px 0 10px;
   margin: 5px;
   padding: 3px;
 `;
@@ -118,7 +142,6 @@ const ButtonContainer = styled.div`
   flex-direction: row;
 `;
 const MessageBox = styled.div`
-
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
@@ -175,13 +198,13 @@ const InputBox = styled.div`
   flex-direction: column;
 `;
 const MessageIconContainer = styled.div`
- height: 70px;
+  height: 70px;
   width: 70px;
   position: sticky;
   bottom: 20px;
   margin-left: calc(100vw - 170px);
   margin-bottom: 35px;
-`
+`;
 const CloseBtn = styled.div`
   margin-top: 15px;
   margin-right: 15px;
@@ -205,6 +228,5 @@ const MessageContainer = styled.div`
   box-shadow: 0px 14px 32px -6px rgba(66, 66, 66, 0.8);
   backdrop-filter: blur(5px);
 `;
-
 
 export default DirectMessage;

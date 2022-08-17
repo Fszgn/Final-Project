@@ -17,7 +17,7 @@ const CheckLoggedIn = ({ trigger }) => {
         .then((data) => {
           console.log(data);
           if (data.body.student && data.body.mentor) {
-            allRedFunc.LogMentorIn(data.body.mentor);
+             allRedFunc.LogStudentIn(data.body.student);
             return;
           } else if (data.body.student !== null) {
             allRedFunc.LogStudentIn(data.body.student);

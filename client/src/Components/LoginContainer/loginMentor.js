@@ -55,7 +55,7 @@ const LoginMentor = ({ trigger, settrigger }) => {
       .then((res) => res.json())
       .then((data) => {
         allRedFunc.LogMentorIn(mentor);
-        console.log(mentor);
+        // console.log(mentor);
       });
   };
 
@@ -81,12 +81,12 @@ const LoginMentor = ({ trigger, settrigger }) => {
       ev.target.checked = false;
       window.alert("You have reached the max number of selection.");
     } else if (ev.target.checked && counter < 3) {
-      console.log("checked");
+      // console.log("checked");
       setCounter(counter + 1);
       setCourse([...course, ev.target.value]);
     } else if (!ev.target.checked) {
       const name = ev.target.value;
-      console.log("UNchecked");
+      // console.log("UNchecked");
       setCounter(counter - 1);
       setCourse(course.filter((el) => el !== name));
     }

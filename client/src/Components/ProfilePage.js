@@ -36,7 +36,7 @@ const ProfilePage = () => {
 
   // Post a new review
   const handleClick = () => {
-    console.log(review);
+    // console.log(review);
     fetch(`/postReview/${userId.id}`, {
       method: "PUT",
       body: JSON.stringify({
@@ -52,8 +52,8 @@ const ProfilePage = () => {
   };
   // Remove a review
   const handleRemove = (ev, param) => {
-    console.log(param);
-    console.log(review);
+    // console.log(param);
+    // console.log(review);
     fetch(`/deleteReview/${userId.id}`, {
       method: "DELETE",
       body: JSON.stringify({
@@ -101,7 +101,7 @@ const ProfilePage = () => {
         .then((res) => res.json())
         .then((data) => {
           setEl(data.body);
-          console.log(data.body)
+          // console.log(data.body)
         });
     }
   }, [review, trigger]);
