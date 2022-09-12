@@ -59,6 +59,14 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
+
+  .get("/", (req,res) => {
+       return res.status(200).json({
+         status: 200,
+         body: "this application runs",
+         success: true,
+       });
+    })
   //generates fake Mentors data
   .get("/userGen", userGen)
   // get the user based on the userUId from Cookie storage
@@ -81,5 +89,5 @@ express()
   .delete("/deleteReview/:id", deleteReview)
 
   .listen(process.env.PORT || 8000, () => {
-    console.log(`Example app listening on PORT ${PORT}`);
+    console.log(`Example app listening on PORT`);
   });
