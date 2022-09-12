@@ -41,7 +41,7 @@
   },
   "scripts": {
     "example": "node examples/signon/app.js",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": " >= 10.x"

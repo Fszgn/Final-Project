@@ -40,9 +40,6 @@ io.on("connection", async (socket) => {
 // SOCKET.IO SERVER
 httpServer.listen(8001);
 
-//SERVER PORT
-const PORT = 8000;
-
 express()
   .use(function (req, res, next) {
     res.header(
@@ -83,6 +80,6 @@ express()
   // DELETE a review
   .delete("/deleteReview/:id", deleteReview)
 
-  .listen(PORT, () => {
+  .listen(process.env.PORT || 8000, () => {
     console.log(`Example app listening on PORT ${PORT}`);
   });

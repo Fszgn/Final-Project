@@ -4,7 +4,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 var NodeGeocoder = require("node-geocoder");
 
 require("dotenv").config("./.env");
-const { MONGO_URI, GOOGLE_MAP_API } = process.env;
+const { MONGO_URI } = process.env;
 
 const options = {
   useNewUrlParser: true,
