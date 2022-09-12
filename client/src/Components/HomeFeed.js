@@ -21,7 +21,7 @@ const HomeFeed = ({ trigger, settrigger }) => {
   //state search by Name
   const [searchName, setSearchName] = useState("");
   //state search by City
-  const [searchCity, setSearchCity] = useState(null);
+  const [searchCity, setSearchCity] = useState("Montreal");
   //state search by Course
   const [searchCourse, setSearchCourse] = useState();
 

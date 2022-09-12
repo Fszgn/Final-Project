@@ -19,26 +19,26 @@ const {
 } = require("./handlers");
 const options = {
   /* ... */ cors: {
-    origin: "https://teal-daifuku-553f1c.netlify.app/",
+    origin: "https://teal-daifuku-553f1c.netlify.app",
     methods: ["GET", "POST"],
   },
 };
-const io = require("socket.io")(httpServer, options);
-//smthng
-//Handle SOCKET.IO
-io.on("connection", async (socket) => {
-  /* ... */
-  const msgArray = await receiveMessages();
-  io.emit("receive_message", msgArray);
+// const io = require("socket.io")(httpServer, options);
+// //smthng
+// //Handle SOCKET.IO
+// io.on("connection", async (socket) => {
+//   /* ... */
+//   const msgArray = await receiveMessages();
+//   io.emit("receive_message", msgArray);
 
-  socket.on("send_message", async (data) => {
-    await addNewMessage(data);
-    const msgArray = await receiveMessages(data);
-    io.emit("receive_message", msgArray);
-  });
-});
-// SOCKET.IO SERVER
-httpServer.listen(8001);
+//   socket.on("send_message", async (data) => {
+//     await addNewMessage(data);
+//     const msgArray = await receiveMessages(data);
+//     io.emit("receive_message", msgArray);
+//   });
+// });
+// // SOCKET.IO SERVER
+// httpServer.listen(process.env.PORT || 8001);
 
 express()
   .use(function (req, res, next) {
@@ -60,13 +60,13 @@ express()
   .use("/", express.static(__dirname + "/"))
 
 
-  .get("/", (req,res) => {
-       return res.status(200).json({
-         status: 200,
-         body: "this application runs",
-         success: true,
-       });
-    })
+  // .get("/", (req,res) => {
+  //      return res.status(200).json({
+  //        status: 200,
+  //        body: "this application runs",
+  //        success: true,
+  //      });
+  //   })
   //generates fake Mentors data
   .get("/userGen", userGen)
   // get the user based on the userUId from Cookie storage

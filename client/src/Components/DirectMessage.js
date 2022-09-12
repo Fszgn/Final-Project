@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Close, CommentOutlined } from "@mui/icons-material";
 
-const socket = io.connect("http://localhost:8001");
+// const socket = io.connect("https://mentormatchingapp-finalpro.herokuapp.com");
 
 const DirectMessage = () => {
   //User's Context
@@ -28,50 +28,50 @@ const DirectMessage = () => {
     allRedFunc.directMessageClose();
   };
 
-  // SOCKET.IO RECEIVE MESSAGE
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setMessgReceived(data);
+  // // SOCKET.IO RECEIVE MESSAGE
+  // useEffect(() => {
+  //   socket.on("receive_message", (data) => {
+  //     setMessgReceived(data);
 
-      let Obj = {};
-      data.messages.forEach((el) => {
-        Obj[el.receiverEmail] = [];
-      });
-      data.messages.forEach((el) => {
-        Obj[el.receiverEmail].push({ text: el.text, time: el.time });
-      });
-      setMessgObj(Obj);
-    });
-  }, [socket]);
+  //     let Obj = {};
+  //     data.messages.forEach((el) => {
+  //       Obj[el.receiverEmail] = [];
+  //     });
+  //     data.messages.forEach((el) => {
+  //       Obj[el.receiverEmail].push({ text: el.text, time: el.time });
+  //     });
+  //     setMessgObj(Obj);
+  //   });
+  // }, [socket]);
 
-  //SOCKET.IO CONNECTION
-  socket.on("connection", () => {
-    // console.log("first");
-  });
+  // //SOCKET.IO CONNECTION
+  // socket.on("connection", () => {
+  //   // console.log("first");
+  // });
 
-  //SOCKET.IO SEND MESSAGE
-  const sendMessage = (data) => {
-    socket.emit(
-      "send_message",
-      allRedFunc.userState.signedStudent !== null
-        ? {
-            body: {
-              time: new Date().getTime(),
-              text: messg,
-              to: allRedFunc.userState.direcMessageTo,
-              from: allRedFunc.userState.signedStudent,
-            },
-          }
-        : {
-            body: {
-              text: messg,
-              time: new Date().getTime(),
-              to: allRedFunc.userState.direcMessageTo,
-              from: allRedFunc.userState.signedMentor,
-            },
-          }
-    );
-  };
+  // //SOCKET.IO SEND MESSAGE
+  // const sendMessage = (data) => {
+  //   socket.emit(
+  //     "send_message",
+  //     allRedFunc.userState.signedStudent !== null
+  //       ? {
+  //           body: {
+  //             time: new Date().getTime(),
+  //             text: messg,
+  //             to: allRedFunc.userState.direcMessageTo,
+  //             from: allRedFunc.userState.signedStudent,
+  //           },
+  //         }
+  //       : {
+  //           body: {
+  //             text: messg,
+  //             time: new Date().getTime(),
+  //             to: allRedFunc.userState.direcMessageTo,
+  //             from: allRedFunc.userState.signedMentor,
+  //           },
+  //         }
+  //   );
+  // };
 
   return (
     <>
@@ -83,7 +83,7 @@ const DirectMessage = () => {
               <CloseBtn onClick={handleDMclose}>
                 <Close style={{ marginRight: " 15px" }} />
               </CloseBtn>
-              <InputBox>
+              {/* <InputBox>
                 <MessageBox>
                   {messgBuble?.map((el) => {
                     return <Bubble>{el.text}</Bubble>;
@@ -113,7 +113,7 @@ const DirectMessage = () => {
                   />
                   <ReviewBtn onClick={sendMessage}>send message</ReviewBtn>
                 </ButtonContainer>
-              </InputBox>
+              </InputBox> */}
             </MessageContainer>
           ) : (
             <MessageIconContainer onClick={handleDMopen}>
