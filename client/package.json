@@ -9,7 +9,7 @@
     "@material-ui/utils": "^4.11.3",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.4",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "firebase": "^9.9.2",
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",

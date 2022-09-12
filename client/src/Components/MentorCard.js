@@ -16,7 +16,9 @@ const MentorCard = ({
   // Shows Pop-up Page with user detail on
   const handleClick = (event) => {
     event.preventDefault();
-    fetch(`/findEachUser/${el._id}`)
+    fetch(
+      `https://mentormatchingapp-finalpro.herokuapp.com/findEachUser/${el._id}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setdetailedUser(data.body);

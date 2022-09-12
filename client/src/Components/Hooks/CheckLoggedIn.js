@@ -12,12 +12,12 @@ const CheckLoggedIn = ({ trigger }) => {
     const cookie = GetCookie("userUId");
     console.log(cookie);
     if (cookie !== undefined) {
-      fetch(`/getTheUser`)
+      fetch(`https://mentormatchingapp-finalpro.herokuapp.com/getTheUser`)
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
           if (data.body.student && data.body.mentor) {
-             allRedFunc.LogStudentIn(data.body.student);
+            allRedFunc.LogStudentIn(data.body.student);
             return;
           } else if (data.body.student !== null) {
             allRedFunc.LogStudentIn(data.body.student);

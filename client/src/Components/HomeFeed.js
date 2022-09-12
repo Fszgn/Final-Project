@@ -60,7 +60,9 @@ const HomeFeed = ({ trigger, settrigger }) => {
 
   //  REceive Mentors data from the server
   useEffect(() => {
-    fetch(`/getTheMentors/${searchCity}`)
+    fetch(
+      `https://mentormatchingapp-finalpro.herokuapp.com/getTheMentors/${searchCity}`
+    )
       .then((res) => res.json())
       .then((data) => {
         // FILTER by first name
@@ -71,7 +73,7 @@ const HomeFeed = ({ trigger, settrigger }) => {
       })
       .then((data) => {
         if (searchCourse === undefined) {
-          return setmentorList(data);;
+          return setmentorList(data);
         }
         // FILTER by course name
         const filteredByCoursse = data.filter((el) => {

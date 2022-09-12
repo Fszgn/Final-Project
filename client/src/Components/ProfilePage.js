@@ -37,13 +37,16 @@ const ProfilePage = () => {
   // Post a new review
   const handleClick = () => {
     // console.log(review);
-    fetch(`/postReview/${userId.id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        text: review,
-      }),
-      headers: { "Content-Type": "application/json" },
-    })
+    fetch(
+      `https://mentormatchingapp-finalpro.herokuapp.com/postReview/${userId.id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          text: review,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setReview({});
