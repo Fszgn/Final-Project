@@ -19,7 +19,7 @@ const {
 } = require("./handlers");
 const options = {
   /* ... */ cors: {
-    origin: "http://localhost:3000",
+    origin: "https://teal-daifuku-553f1c.netlify.app/",
     methods: ["GET", "POST"],
   },
 };
