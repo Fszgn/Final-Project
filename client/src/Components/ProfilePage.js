@@ -57,14 +57,17 @@ const ProfilePage = () => {
   const handleRemove = (ev, param) => {
     // console.log(param);
     // console.log(review);
-    fetch(`/deleteReview/${userId.id}`, {
-      method: "DELETE",
-      body: JSON.stringify({
-        text: review,
-        id: param,
-      }),
-      headers: { "Content-Type": "application/json" },
-    })
+    fetch(
+      `https://mentormatchingapp-finalpro.herokuapp.com/deleteReview/${userId.id}`,
+      {
+        method: "DELETE",
+        body: JSON.stringify({
+          text: review,
+          id: param,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setReview({});
@@ -75,16 +78,19 @@ const ProfilePage = () => {
   const handleStartConversation = () => {
     allRedFunc.directMessageOpen();
     allRedFunc.directTo({ el });
-    fetch(`/startConversation`, {
-      method: "POST",
-      body: JSON.stringify({
-        text: "I'd like to connect",
-        time: new Date().getTime(),
-        to: el,
-        from: allRedFunc.userState,
-      }),
-      headers: { "Content-Type": "application/json" },
-    });
+    fetch(
+      `https://mentormatchingapp-finalpro.herokuapp.com/startConversation`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          text: "I'd like to connect",
+          time: new Date().getTime(),
+          to: el,
+          from: allRedFunc.userState,
+        }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   };
 
   // If No User signedIn -> redirect the User to LOGIN
@@ -100,7 +106,9 @@ const ProfilePage = () => {
   useEffect(() => {
     if (userId.id) {
       // console.log(userId.id.length);
-      fetch(`/findEachUser/${userId.id}`)
+      fetch(
+        `https://mentormatchingapp-finalpro.herokuapp.com/findEachUser/${userId.id}`
+      )
         .then((res) => res.json())
         .then((data) => {
           setEl(data.body);
