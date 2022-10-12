@@ -5,7 +5,7 @@ var NodeGeocoder = require("node-geocoder");
 
 require("dotenv").config("./.env");
 const { MONGO_URI } = process.env;
-
+console.log(MONGO_URI);
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,

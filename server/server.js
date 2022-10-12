@@ -59,14 +59,13 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use("/", express.static(__dirname + "/"))
 
-
-  .get("/", (req,res) => {
-       return res.status(200).json({
-         status: 200,
-         body: "this application runs",
-         success: true,
-       });
-    })
+  .get("/", (req, res) => {
+    return res.status(200).json({
+      status: 200,
+      body: "this application runs",
+      success: true,
+    });
+  })
   //generates fake Mentors data
   .get("/userGen", userGen)
   // get the user based on the userUId from Cookie storage
@@ -87,6 +86,15 @@ express()
   .put("/postReview/:id", postReview)
   // DELETE a review
   .delete("/deleteReview/:id", deleteReview)
+  // Handle bad request
+  .all("*", function (req, res) {
+    throw new Error("Bad request");
+  })
+  .use(function (e, req, res, next) {
+    if (e.message === "Bad request") {
+      res.status(400).json({ error: { msg: e.message } });
+    }
+  })
 
   .listen(process.env.PORT || 8000, () => {
     console.log(`Example app listening on PORT`);
